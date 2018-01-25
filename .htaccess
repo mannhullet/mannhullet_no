@@ -1,0 +1,13 @@
+#AuthName "Mannhullet.no oppgraderes, kommer snart!"
+#AuthType Basic
+#AuthUserFile /customers/2/b/1/mannhullet.no/httpd.www/.htpasswd
+#AuthGroupFile /dev/null
+#require valid-user
+
+RewriteEngine on
+RewriteRule (.*) public/$1 [L]
+
+#Rewrite everything to https
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
