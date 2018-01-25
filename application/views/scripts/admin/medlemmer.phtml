@@ -1,0 +1,120 @@
+                <div style="margin-top:30px;" class="row">
+<?php include(__DIR__.'/menu.phtml'); ?>
+                    <div class="col-sm-12 col-md-10">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h1 style="margin-top:0;">Medlemmer <small>Brukere og tillattelser</small></h1>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" name="search" style="margin:0px 0 5px 0;width:100%;" class="form-control search" placeholder="Søk etter bruker eller e-post..." />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h3 style="margin-bottom:5px;">Medlemmer</h3>
+                                <table id="normalMembersTable" style="margin-top:10px;" class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Navn</th>
+                                            <th>E-post</th>
+                                            <th>Status</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                                <div id="normalMembersTablePagination" class="ul-center">
+                                    <span>
+                                        <ul style="margin-top:0;" class="pagination pagination-sm">
+                                            <li class="disabled"><a href="#">&laquo;</a></li>
+                                            <li class="active"><a href="#">1</a></li>
+                                            <li class="disabled"><a href="#">&raquo;</a></li>
+                                        </ul>
+                                    </span>
+                                </div>
+                                <h3 style="margin-bottom:5px;">Registrasjonsrett</h3>
+<?php if (count($this->registrationTokens) > 0): ?>
+                                <table id="registrationTokenTable" style="margin-top:10px;" class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>E-post</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                                <div id="registrationTokenTablePagination" class="ul-center">
+                                    <span>
+                                        <ul style="margin-top:0;" class="pagination pagination-sm">
+                                            <li class="disabled"><a href="#">&laquo;</a></li>
+                                            <li class="active"><a href="#">1</a></li>
+                                            <li class="disabled"><a href="#">&raquo;</a></li>
+                                        </ul>
+                                    </span>
+                                </div>
+<?php else: ?>
+                                <div class="alert alert-info">
+                                    Det er ikke gitt noen registrasjonsrett enda. Kanskje alle har fullført registrasjonen sin?
+                                </div>
+<?php endif; ?>
+                            </div>
+                            <div class="col-md-5">
+                                <h3>Opprett registreringsrett</h3>
+                                <p>Lim inn en liste med stud. e-poster for å gi de rett til å opprette konto på Mannhullet.no</p>
+                                <form action="" method="post" role="form">
+                                    <input type="hidden" name="act" value="registrationRight" class="form-control" placeholder="" />
+                                    <div class="form-group">
+                                        <label for="emails">Stud. e-poster <small>(én per linje)</small></label>
+                                        <textarea name="emails" rows="10" style="width:100%;" class="form-control"></textarea>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="sendMail" value="true" /> Send invitasjoner (på e-post)
+                                        </label>
+                                    </div>
+                                    <button type="submit" style="margin-top:10px;" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Opprett registrasjonsrett</button>
+                                </form>
+                                <hr />
+                                <h3>Legg til sideadministrator</h3>
+                                <form action="" method="post" role="form">
+                                    <input type="hidden" name="act" value="promoteSiteAdmin" class="form-control" placeholder="" />
+                                    <div class="form-group">
+                                        <input type="text" name="name" value="" style="width:100%;" class="form-control typeahead" placeholder="Søk etter bruker" />
+                                        <input type="hidden" name="email" value="" class="form-control" placeholder="" />
+                                    </div>
+                                    <button type="submit" name="submit" value="promoteSiteAdmin" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Legg til sideadministrator</button>
+                                </form>
+                                <h3>Sideadministratorer</h3>
+<?php if (count($this->siteAdmins) == 0): ?>
+                                <div class="alert alert-info">
+                                    Det er ikke lagt til noen sideadministratorer enda
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Navn</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+<?php foreach ($this->siteAdmins as $user): ?>
+                                        <tr>
+                                            <td><?php echo $user->name . ' (' . reset(explode('@', $user->email)) . ')'; ?></td>
+<?php if (count($this->siteAdmins) == 1): ?>
+                                            <td></td>
+<?php else: ?>
+                                            <td><a href="/admin/medlemmer/act/revokeSiteAdmin/uid/<?php echo $user->id; ?>">Fjern</a></td>
+<?php endif; ?>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>

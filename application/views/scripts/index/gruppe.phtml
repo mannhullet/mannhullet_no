@@ -1,0 +1,105 @@
+                <div class="row">
+                    <div class="col-sm-offset-0 col-sm-12<?php echo (count($this->groupPages) > 0 ? ' col-md-12' : ' col-md-offset-1 col-md-10'); ?>">
+<?php if ($this->user && ($this->user->admin || Model_DbTable_GroupAdmins::isGroupAdmin($this->user, $this->group))): ?>
+                        <h1><?php echo $this->group->title; ?>
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                    Administrer <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li><a href="/endre/nyheter/gid/<?php echo $this->group->id; ?>">Opprett en nyhetsartikkel</a></li>
+                                    <li><a href="/endre/arrangementer/gid/<?php echo $this->group->id; ?>">Opprett et arrangement</a></li>
+                                    <li role="presentation" class="divider"></li>
+                                    <li><a href="/endre/gruppebeskrivelse/gid/<?php echo $this->group->id; ?>">Endre gruppen</a></li>
+                                    <li><a href="/endre/gruppesider/gid/<?php echo $this->group->id; ?>">Administrer undersider</a></li>
+                                </ul>
+                            </div>
+                        </h1>
+<?php else: ?>
+                        <h1><?php echo $this->group->title; ?></h1>
+<?php endif; ?>
+                    </div>
+                </div>
+                <div class="row">
+<?php if (count($this->groupPages) > 0): ?>
+                    <div class="col-sm-12 col-md-2 submenu">
+                        <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="340" data-offset-bottom="250">
+                            <li<?php if ($this->isGroupFront) echo ' class="active"'; ?>><a href="/gruppe/<?php echo $this->group->id; ?>">Nyheter</a></li>
+<?php foreach ($this->groupPages as $page): ?>
+                            <li<?php if ($page->id == $this->page->id) echo ' class="active"'; ?>><a href="<?php echo ($page->isExternal() ? $page->external . '" target="_BLANK' : '/gruppe/' . $this->group->id . '/' . $page->id); ?>"><?php echo $page->title; if ($page->isExternal()): ?> <span class="glyphicon glyphicon-link pull-right"></span><?php endif; ?></a></li>
+<?php endforeach; ?>
+                        </ul>
+                    </div>
+<?php endif; ?>
+                    <div class="col-sm-offset-0 col-sm-12<?php echo (count($this->groupPages) > 0 ? '' : ' col-md-offset-1'); ?> col-md-3 col-md-push-7">
+                        <h3>Om <?php echo $this->group->title; ?></h3>
+                        <p><?php echo $this->group->body; ?></p>
+<?php if (count($this->events) > 0): ?>
+                        <h3>Kommende arrangementer</h3>
+                        <table style="width:100%;" class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Arrangementer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<?php foreach ($this->events as $event): ?>
+                                <tr data-post-id="<?php echo $event->id; ?>">
+                                    <td>
+                                        <a href="/arrangement/<?php echo $event->id; ?>"<?php if($event->isGroupEvent() && $event->getGroup()->color != null) echo ' style="color:' . $event->getGroup()->color . '";'; ?>><h3><?php echo $event->title; ?></h3></a>
+                                        <p><?php echo $event->getDateTimeSmall(); ?></p>
+                                        <p><?php echo $event->ingress; ?></h3></p>
+                                    </td>
+                                </tr>
+<?php endforeach; ?>
+                            </tbody>
+                        </table>
+<?php endif; ?>
+                    </div>
+                    <div class="col-sm-12 col-md-7 col-md-pull-3">
+<?php if ($this->isGroupFront): if ($this->group->image): ?>
+                        <div class="thumbnail">
+                            <p style="max-height:300px;overflow:hidden;margin-bottom:0;"><img src="<?php echo $this->group->image; ?>" style="min-width:100%;max-width:100%;" alt="" /></p>
+                        </div>
+<?php endif; if (count($this->news) > 0): foreach ($this->news as $news): ?>
+                            <div class="thumbnail post">
+<?php if ($news->image != null): ?>
+                                <a href="/nyhet/<?php echo $news->id; ?>"><img src="<?php echo $news->image; ?>" alt="Article cover image"></a>
+<?php endif; ?>
+                                <div class="caption">
+                                    <h3><a href="/nyhet/<?php echo $news->id; ?>" class="cap"><?php echo $news->title; ?></a></h3>
+                                    <p><small>Publisert: <?php echo $news->getDateTime(true) . ($news->getDateTime(true) != $news->getDateTime(false) ? '. Sist endret: ' . $news->getDateTime(false) : ''); ?>.</small></p>
+                                    <p><?php echo $news->ingress; ?></p>
+<?php if ($this->user && ($this->user->admin || ($news->isGroupArticle() ? Model_DbTable_GroupAdmins::isGroupAdmin($this->user, $news->getGroup()) : false))): ?>
+                                    <p><a href="/nyhet/<?php echo $news->id; ?>" style="margin-right:10px;" class="btn btn-default" role="button">Les mer</a><a href="/endre/nyheter/aid/<?php echo $news->id; ?>" class="btn btn-default">Endre</a></p>
+<?php else: ?>
+                                    <p><a href="/nyhet/<?php echo $news->id; ?>" class="btn btn-default" role="button">Les mer</a></p>
+<?php endif; ?>
+                                </div>
+                            </div>
+<?php endforeach; if ($this->pageCount > 1): ?>
+                            <div class="ul-center">
+                                <span>
+                                    <ul style="margin-top:0;" class="pagination pagination-sm">
+                                        <li<?php if (($this->pageNum-1) == 0) echo ' class="disabled"'; ?>><a href="<?php echo ($this->pageNum-1) == 0 ? '#' : '/gruppe/' . $this->group->id . '/page/' . ($this->pageNum-1); ?>">&laquo;</a></li>
+<?php for ($p = 1; $p <= $this->pageCount; $p++): ?>
+                                        <li<?php if ($this->pageNum == $p) echo ' class="active"'; ?>><a href="/gruppe/<?php echo $this->group->id . '/page/' . $p . '">' . $p; ?></a></li>
+<?php endfor; ?>
+                                        <li<?php if (($this->pageNum+1) > $this->pageCount) echo ' class="disabled"'; ?>><a href="<?php echo ($this->pageNum+1) > $this->pageCount ? '#' : '/gruppe/' . $this->group->id . '/page/' . ($this->pageNum+1); ?>">&raquo;</a></li>
+                                    </ul>
+                                </span>
+                            </div>
+<?php endif; else: ?>
+                            <div style="margin-top:30px;" class="alert alert-info">
+                                Det er ikke lagt ut nyheter i denne gruppen enda
+                            </div>
+<?php endif; else: ?>
+<?php if ($this->user && ($this->user->admin || Model_DbTable_GroupAdmins::isGroupAdmin($this->user, $this->group))): ?>
+                        <h2><?php echo $this->page->title; ?><span class="pull-right"><a href="/endre/gruppesider/gid/<?php echo $this->group->id . '/pid/' . $this->page->id; ?>" class="btn btn-default">Endre</a></span></h2>
+<?php else: ?>
+                        <h2><?php echo $this->page->title; ?></h2>
+<?php endif; ?>
+                        <?php echo $this->page->getFiltered(); ?>
+<?php endif; ?>
+                    </div>
+                </div>

@@ -1,0 +1,53 @@
+                <div class="row">
+                    <div class="col-md-12 calendar clearfix">
+                        <h3 class="text-center"><a href="/arrangement<?php echo $this->previousMonthParam; ?>"><span class="glyphicon glyphicon-backward"></span></a>&nbsp;&nbsp;&nbsp; <?php echo ($this->isCurrentMonth ? 'Månedens arrangementer' : 'Arrangementer ' . $this->currentMonthTitle . ($this->year != date('Y') ? ' (' . $this->year . ')' : '')); ?> &nbsp;&nbsp;&nbsp;<a href="/arrangement<?php echo $this->nextMonthParam; ?>"><span class="glyphicon glyphicon-forward"></span></a></h3>
+                        <span style="margin:-35px 15px 0 0;font-size:17px;" class="pull-right"><a href="/arrangement/list"><span class="glyphicon glyphicon-list"></span> Listevisning</a></span>
+                        <div class="col-xs-12">
+                            <table style="table-layout:fixed;" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width:5%;">Uke</th>
+                                        <th style="width:13%;<?php if ($this->isCurrentMonth && date('N') == 1) echo 'color:#404d75;'; ?>">Mandag</th>
+                                        <th style="width:13%;<?php if ($this->isCurrentMonth && date('N') == 2) echo 'color:#404d75;'; ?>">Tirsdag</th>
+                                        <th style="width:13%;<?php if ($this->isCurrentMonth && date('N') == 3) echo 'color:#404d75;'; ?>">Onsdag</th>
+                                        <th style="width:13%;<?php if ($this->isCurrentMonth && date('N') == 4) echo 'color:#404d75;'; ?>">Torsdag</th>
+                                        <th style="width:13%;<?php if ($this->isCurrentMonth && date('N') == 5) echo 'color:#404d75;'; ?>">Fredag</th>
+                                        <th style="width:13%;<?php if ($this->isCurrentMonth && date('N') == 6) echo 'color:#404d75;'; ?>">Lørdag</th>
+                                        <th style="width:13%;<?php if ($this->isCurrentMonth && date('N') == 7) echo 'color:#404d75;'; ?>">Søndag</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+<?php foreach ($this->events as $weekNum => $week): ?>
+                                    <tr<?php if ($this->isCurrentMonth && date('W') == $weekNum) echo ' class="info"'; ?>>
+                                        <td style="height:90px;" class="text-muted text-center"><?php echo $weekNum; ?></td>
+<?php foreach ($week as $day): ?>
+                                        <td style="<?php echo (!$day['isRightMonth'] ? 'background-color:#f2f2f2;' : ''); ?>" class="text-center">
+                                            <p<?php echo ($this->isCurrentMonth && $day['isRightMonth'] == true && $day['dayOfMonth'] == date('d') ? ' style="color:#404d75;font-weight:bolder;font-size:17px;"' : ''); ?> class="text-muted"><?php echo $day['dayOfMonth']; ?></p>
+<?php
+
+foreach ($day['events'] as $event):
+
+    $dateTime = $event->getDateTime();
+    $location = $event->location;
+    $orgedby  = $event->getOrgedBy();
+    $ingress  = $event->ingress;
+
+    $dataContent = "${dateTime}<p>Lokalisjon: <span class='pull-right'>${location}</span></p>" . ($orgedby ? "<p>Org. av: <span class='pull-right'>${orgedby}</span></p>" : '') . "<p style='margin-top:20px'>${ingress}</p>";
+
+    $dataContent = str_replace('"', "'", $dataContent);
+    $dataContent = str_replace("\n", '', $dataContent);
+
+?>
+                                            <a href="/arrangement/<?php echo $event->id; ?>" style="display:block;max-width:100%;margin-top:3px;">
+                                                <span style="display:block;overflow:hidden;text-overflow:ellipsis;<?php if($event->isGroupEvent() && $event->getGroup()->color != null) echo 'background-color:' . $event->getGroup()->color . ';'; ?>" class="label label-info" data-toggle="popover" data-title="<?php echo $event->title; ?>" data-placement="<?php echo (date('N', $day['dayStartTime']) > 5 ? 'left' : 'right'); ?>" data-content="<?php echo $dataContent; ?>"><?php echo $event->title; ?></span>
+                                            </a>
+<?php endforeach; ?>
+                                        </td>
+<?php endforeach; ?>
+                                    </tr>
+<?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>

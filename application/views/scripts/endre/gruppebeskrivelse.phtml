@@ -1,0 +1,33 @@
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><a href="/gruppe/<?php echo $this->group->id; ?>"><?php echo $this->group->title; ?></a> &raquo; Endre gruppebeskrivelse</h1>
+                        <form action="" method="POST" class="form-horizontal" role="form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="image">Bannerbilde <small>(653x300, lenke, valgfri)</small></label>
+                                    <div class="input-group">
+                                        <input id="image" type="text" name="image" value="<?php echo $this->group->image; ?>" class="form-control" placeholder="" />
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default" onclick="openMediaBrowser();"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                        </div>
+                                    </div>
+                                    <div style="display:none;" class="mediaModal">
+                                        <iframe src="/fileman/index.html?integration=custom&type=image&txtFieldId=image" style="width:100%;height:100%" frameborder="0"></iframe>
+                                    </div>
+                                    <script>
+                                        function openMediaBrowser(){
+                                            $('div.mediaModal').dialog({modal:true, width:875,height:600});
+                                        }
+                                        function closeMediaBrowser(){
+                                            $('div.mediaModal').dialog('close');
+                                        }
+                                    </script>
+                                </div>
+                                <div class="form-group">
+                                    <textarea name="html" rows="10" style="width:100%;" class="form-control tinymce"><?php echo $this->group->body; ?></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
+                        </form>
+                    </div>
+                </div>

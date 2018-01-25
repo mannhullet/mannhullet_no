@@ -1,0 +1,88 @@
+                <div style="margin-top:30px;" class="row register">
+<?php if ($this->message): ?>
+                    <div class="col-sm-offset-0 col-sm-12 col-md-offset-1 col-md-10">
+                        <div class="alert alert-info">
+                            <?php echo $this->message; ?>
+                        </div>
+                    </div>
+<?php endif; ?>
+                    <div class="col-sm-offset-0 col-sm-8 col-md-offset-1 col-md-6">
+                        <h3>Nytt medlem?</h3>
+                        <form action="/registrer" method="post" name="register" role="form">
+                            <input type="hidden" name="act" value="register" />
+                            <p>Registrering vil kun fungere hvis sideadministratoren har lagt inn registrasjonsrett for din e-postadresse. Ta kontakt med linjeforeningens webansvarlig hvis du enda ikke får registrert deg etter skolestart.</p>
+<?php if ($this->errorReg): ?>
+                            <div class="alert alert-warning">
+                                <strong>Feil!</strong> <?php echo $this->errorReg; ?>
+                            </div>
+<?php endif; ?>
+                            <div class="form-group">
+                                <label for="username">Studentbrukernavn</label>
+                                <div class="input-group">
+                                    <input type="text" name="username" value="<?php echo $this->usr; ?>" placeholder="Studentbrukernavn" class="form-control" />
+                                    <div class="input-group-addon">@stud.ntnu.no</div>
+                                </div>
+                                <p class="help-block">Studentbrukernavnet ditt er den første delen av ntnueposten din.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Fullt navn</label>
+                                <input type="text" name="name" value="" placeholder="Ditt fulle navn" class="form-control">
+                                <p class="help-block">Missbruk medfører utestengelse, bruk navnet du finner i passet ditt.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Ønsket passord</label>
+                                <input type="password" name="password" value="" placeholder="Ønsket passord" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Passord igjen</label>
+                                <input type="password" name="passwordConfirm" value="" placeholder="Passord igjen" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" style="width:100%;" class="btn btn-default">Registrer deg</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>Allerede medlem?</h3>
+                        <form action="/registrer" method="post" role="form">
+                            <input type="hidden" name="act" value="login" />
+<?php if ($this->error): ?>
+                            <div class="alert alert-warning">
+                                <strong>Feil!</strong> <?php echo $this->error; ?>
+                            </div>
+<?php endif; ?>
+                            <div class="form-group">
+                                <label for="email">Studentepost</label>
+                                <input type="text" name="email" value="" placeholder="Studentepost" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Passord</label>
+                                <input type="password" name="password" value="" placeholder="Passord" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" style="width:100%;" class="btn btn-default">Logg inn</button>
+                            </div>
+                            <div style="margin-top:0px;" class="text-center">
+                                <a href="#" onclick="$('div.forgottenPassword:first').removeClass('hide');$(this).addClass('hide');return false;">Jeg har glemt passordet mitt!</a>
+                            </div>
+                        </form>
+                        <div class="forgottenPassword<?php echo ($this->errorForgottenPw ? '' : ' hide'); ?>">
+                            <h3>Glemt passord</h3>
+                            <form action="/registrer" method="post" role="form">
+                                <input type="hidden" name="act" value="passwordreset" />
+<?php if ($this->errorForgottenPw): ?>
+                                <div class="alert alert-warning">
+                                    <strong>Feil!</strong> <?php echo $this->errorForgottenPw; ?>
+                                </div>
+<?php endif; ?>
+                                <div class="form-group">
+                                    <label for="email">Studentepost</label>
+                                    <input type="text" name="email" value="" placeholder="Studentepost" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" style="width:100%;" class="btn btn-default">Send meg nytt passord</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>

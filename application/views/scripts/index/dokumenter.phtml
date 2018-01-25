@@ -1,0 +1,50 @@
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>Dokumenter</h1>
+                    </div>
+                </div>
+<?php if (count($this->nthsdocs) > 0): foreach ($this->nthsdocs as $category => $nthsdocs): ?>
+                <div class="row gallery">
+                    <div class="col-md-12 galleryYear">
+                        <h2><?php echo $category; ?></h2>
+                    </div>
+<?php foreach ($nthsdocs as $nths): ?>
+                    <div style="height:440px;" class="col-xs-6 col-md-3 documentsTag">
+                        <a href="/dokumenter/<?php echo $nths->id; ?>" class="thumbnail">
+<?php if ($nths->cover_image_src): ?>
+                            <img src="<?php echo $nths->cover_image_src; ?>" />
+<?php else: ?>
+                            <div class="noCover text-center">
+                                <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
+                            </div>
+
+<?php endif; ?>
+                            <div class="caption">
+                                <h3><?php echo $nths->title; ?></h3>
+                                <small class="text-muted">Publisert <?php echo $nths->getPublishedDate(); ?></small>
+                            </div>
+                        </a>
+<?php if ($this->user && $this->user->admin): ?>
+                        <p style="margin-top:-10px;"><a href="/dokumenter/<?php echo $nths->id . '/act/deletedocument'; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette dokumentet &laquo;<?php echo $nths->title; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></p>
+<?php endif; ?>
+                    </div>
+<?php endforeach; ?>
+                </div>
+<?php endforeach; else: ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="margin-top:30px;" class="alert alert-info">
+                            Det er ikke lagt ut noen dokumenter enda
+                        </div>
+                    </div>
+                </div>
+<?php endif; ?>
+<?php if ($this->uploadWidget): ?>
+                <div class="col-sm-12 col-md-12">
+                    <hr />
+                    <h3>Last opp dokumenter for <?php echo date('Y'); ?><span class="pull-right"><a href="/endre/dokumenter" class="btn btn-default">Last opp for tidligere år</a></span></h3>
+                </div>
+                <div id="uploader" style="overflow:hidden;" class="col-sm-12 col-md-12">
+                    <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+                </div>
+<?php endif; ?>

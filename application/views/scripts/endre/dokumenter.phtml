@@ -1,0 +1,36 @@
+<?php if (!$this->year): ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><a href="/dokumenter">Dokumenter</a> &raquo; Velg årstall</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <form action="" method="get" role="form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="year">Årstall du vil publisere for</label>
+                                    <input type="text" name="year" class="form-control" placeholder="" />
+                                </div>
+                                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span> Velg</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+<?php else: ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->year; ?> &raquo; Last opp</h1>
+                    </div>
+                </div>
+<?php if ($this->uploadWidget): ?>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h3>Last opp dokumenter for år <?php echo $this->year; ?></h3>
+                    </div>
+                    <div id="uploader" style="overflow:hidden;" class="col-sm-12 col-md-12">
+                        <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+                    </div>
+                </div>
+<?php endif; ?>
+<?php endif; ?>

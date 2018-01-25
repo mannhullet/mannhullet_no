@@ -1,0 +1,60 @@
+                <div class="row">
+                    <div class="col-md-12 calendar clearfix">
+                        <h3 class="text-center">Kommende arrangementer</h3>
+                        <span style="margin:-35px 15px 0 0;font-size:17px;" class="pull-right"><a href="/arrangement"><span class="glyphicon glyphicon-calendar"></span> Kalendervisning</a></span>
+                        <div class="col-xs-12">
+<?php if (count($this->events) > 0): ?>
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tid / dato</th>
+                                        <th style="width:50%;">Beskrivelse</th>
+                                        <th style="width:30%;">Fakta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+<?php foreach ($this->events as $event): ?>
+                                    <tr data-post-id="<?php echo $event->id; ?>">
+                                        <td style="color:#777;vertical-align:middle;"><?php echo $event->getDateTime(); ?></td>
+                                        <td>
+                                            <a href="/arrangement/<?php echo $event->id; ?>"<?php if($event->isGroupEvent() && $event->getGroup()->color != null) echo ' style="color:' . $event->getGroup()->color . '";'; ?>><h3><?php echo $event->title; ?></h3></a>
+                                            <p><?php echo $event->ingress; ?></h3></p>
+                                        </td>
+                                        <td style="vertical-align:middle;">
+                                            <dl style="margin-bottom:0;" class="dl-horizontal">
+<?php if ($event->getOrgedBy()): ?>
+                                                <dt style="width:90px;margin-bottom:10px;">Org. av</dt>
+                                                <dd style="margin-left:120px;margin-right:20px;">
+                                                    <?php echo $event->getOrgedByLink(); ?><?php if ($event->getGroup()->color != null) echo '<span style="background-color:' . $event->getGroup()->color . ';margin-left:10px;" class="badge ">&nbsp;</span> '; ?>
+                                                </dd>
+<?php endif; ?>
+                                                <dt style="width:90px;">Deltagelse</dt>
+                                                <dd style="margin-left:120px;margin-right:20px;">
+<?php if ($event->participants_max != 0): ?>
+                                                    <div style="margin-bottom:10px;" class="progress">
+                                                        <div class="progress-bar progress-bar-mb" role="progressbar" aria-valuenow="<?php echo $event->participants_current; ?>" aria-valuemin="0" aria-valuemax="<?php echo $event->participants_max; ?>" style="width:<?php echo round($event->participants_current / $event->participants_max, 3) * 100;  ?>%;">
+                                                            <?php echo $event->participants_current . ' / ' . $event->participants_max; ?>
+                                                        </div>
+                                                    </div>
+<?php else: ?>
+                                                    <?php echo $event->participants_current . ' / &infin;'; ?>
+<?php endif; ?>
+                                                </dd>
+                                                <dt style="width:90px;margin-bottom:10px;">Lokalisjon</dt>
+                                                <dd style="margin-left:120px;margin-right:20px;">
+                                                    <?php echo $event->location; ?>
+                                                </dd>
+                                            </dl>
+                                        </td>
+                                    </tr>
+<?php endforeach; ?>
+                                </tbody>
+                            </table>
+<?php else: ?>
+                            <div style="margin-top:30px;" class="alert alert-info">
+                                Det er ikke lagt ut noen kommende arrangementer
+                            </div>
+<?php endif; ?>
+                        </div>
+                    </div>
+                </div>

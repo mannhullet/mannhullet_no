@@ -1,0 +1,57 @@
+                <div class="row">
+                    <div class="col-md-12 nystudent">
+                        <h2>Steg for steg</h2>
+                        <p><?php echo Model_DbTable_Partials::getHtml('/nystudent/stegforsteg:velkommen'); ?></p>
+<?php if ($this->user && $this->user->admin == 1): ?>
+                        <p><a href="/endre/partial/pid/7" class="btn btn-default">Endre</a></p>
+<?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="stepbystep">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 step">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <h3><span>1.</span> Finn et sted å bo</h3>
+                            <p><?php echo Model_DbTable_Partials::getHtml('/nystudent/stegforsteg:finnetstedabo'); ?></p>
+<?php if ($this->user && $this->user->admin == 1): ?>
+                            <p><a href="/endre/partial/pid/8" class="btn btn-default">Endre</a></p>
+<?php endif; ?>
+                        </div>
+                        <div class="col-md-3 step">
+                            <span class="glyphicon glyphicon-credit-card"></span>
+                            <h3><span>2.</span> Søk lånekassen <span>&</span> betal semesteravgift</h3>
+                            <p><?php echo Model_DbTable_Partials::getHtml('/nystudent/stegforsteg:lanekassenogsemesteravgift'); ?></p>
+<?php if ($this->user && $this->user->admin == 1): ?>
+                            <p><a href="/endre/partial/pid/9" class="btn btn-default">Endre</a></p>
+<?php endif; ?>
+                        </div>
+                        <div class="col-md-3 step">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            <h3><span>3.</span> Skolestart</h3>
+                            <p><?php echo Model_DbTable_Partials::getHtml('/nystudent/stegforsteg:skolestart'); ?></p>
+<?php if ($this->user && $this->user->admin == 1): ?>
+                            <p><a href="/endre/partial/pid/10" class="btn btn-default">Endre</a></p>
+<?php endif; ?>
+                        </div>
+                        <div class="col-md-3 step">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                            <h3><span>4.</span> Finn ut mer</h3>
+                            <p><?php echo Model_DbTable_Partials::getHtml('/nystudent/stegforsteg:finnutmer'); ?></p>
+<?php if ($this->user && $this->user->admin == 1): ?>
+                            <p><a href="/endre/partial/pid/11" class="btn btn-default">Endre</a></p>
+<?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<?php /*
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 nystudent">
+                        <h2>FAQ<?php if ($this->user && $this->user->admin == 1): ?><span class="pull-right"><a href="/endre/partial/pid/12" class="btn btn-default">Endre</a></span><?php endif; ?></h2>
+                        <p><?php echo Model_DbTable_Partials::getHtml('/nystudent/stegforsteg:faq'); ?></p>
+                    </div>
+                </div>
+<?php */ ?>

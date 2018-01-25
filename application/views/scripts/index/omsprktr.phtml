@@ -1,0 +1,76 @@
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-md-2 submenu">
+                        <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="340" data-offset-bottom="250">
+                            <li><a href="/om">Historie</a></li>
+                            <li><a href="/om/statutter">Statutter</a></li>
+                            <li><a href="/om/styret">Styret</a></li>
+                            <li><a href="/om/undergruppesjefer">Undergruppesjefer</a></li>
+                            <li class="active"><a href="/om/spr_ktr">ITV/KTR</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        <h1 style="margin-top:0;">INSTITUTTILLITSVALGT <small>(ITV)</small></h1>
+                        <div class="row">
+<?php if (count($this->personsSpr) == 0): ?>
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    Det er ikke lagt inn noen instituttillitsvalgte her enda.
+                                </div>
+                            </div>
+<?php else: foreach ($this->personsSpr as $person): ?>
+                            <div class="col-sm-6 col-md-4 styremedlem"<?php if ($person->popover) echo ' data-content="<p>' . $person->popover . '</p>"'; ?>>
+                                <div class="thumbnail">
+                                    <img src="<?php echo $person->image; ?>" alt="Profilbilde av <?php echo $person->name; ?>" />
+                                    <div class="caption">
+                                        <h4 class="text-center"><?php echo $person->name . ($person->title == null ? '' : '<br /><small>' . $person->title . '</small>'); ?></h4>
+<?php if ($person->contact_info != null): ?>
+                                        <ul class="list-unstyled text-center">
+<?php foreach (explode("\n", $person->contact_info) as $line): if (strpos($line, '@') !== false): ?>
+                                            <li><a href="mailto:<?php echo $line . '" class="text-muted">' . $line . '</a>'; ?></li>
+<?php else: ?>
+                                            <li class="text-muted"><?php echo $line; ?></li>
+<?php endif; endforeach; ?>
+                                        </ul>
+<?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+<?php endforeach; endif; ?>
+                            <div class="col-sm-6 col-md-4 styremedlem">
+                                <h4 class="text-center">Om ITV</h4>
+                                <p class="text-center"><?php echo Model_DbTable_Partials::getHtml('/om/spr_ktr:omSpr'); ?></p>
+<?php if ($this->user && $this->user->admin): ?>
+                                <p class="text-center"><a href="/endre/partial/pid/14" class="btn btn-default">Endre</a></p>
+<?php endif; ?>
+                            </div>
+                        </div>
+                        <h1>KLASSETILLITSREPRESENTANTER <small>(KTR)</small></h1>
+                        <div class="row">
+<?php if (count($this->personsKtr) == 0): ?>
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    Det er ikke lagt inn noen klassetillitsrepresentanter her enda.
+                                </div>
+                            </div>
+<?php else: foreach ($this->personsKtr as $person): ?>
+                            <div class="col-sm-6 col-md-4 styremedlem"<?php if ($person->popover) echo ' data-content="<p>' . $person->popover . '</p>"'; ?>>
+                                <div class="thumbnail">
+                                    <img src="<?php echo $person->image; ?>" alt="Profilbilde av <?php echo $person->name; ?>" />
+                                    <div class="caption">
+                                        <h4 class="text-center"><?php echo $person->name . ($person->title == null ? '' : '<br /><small>' . $person->title . '</small>'); ?></h4>
+<?php if ($person->contact_info != null): ?>
+                                        <ul class="list-unstyled text-center">
+<?php foreach (explode("\n", $person->contact_info) as $line): if (strpos($line, '@') !== false): ?>
+                                            <li><a href="mailto:<?php echo $line . '" class="text-muted">' . $line . '</a>'; ?></li>
+<?php else: ?>
+                                            <li class="text-muted"><?php echo $line; ?></li>
+<?php endif; endforeach; ?>
+                                        </ul>
+<?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+<?php endforeach; endif; ?>
+                        </div>
+                    </div>
+                </div>

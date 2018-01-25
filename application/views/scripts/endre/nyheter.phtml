@@ -1,0 +1,106 @@
+<?php if (!isset($this->article)): ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><?php if($this->group): ?><a href="/gruppe/<?php echo $this->group->id; ?>"><?php echo $this->group->title; ?></a> &raquo; <?php endif; ?>Opprett nyhetsartikkel</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <form action="" method="post" role="form">
+                            <div class="form-group">
+                                <label for="title">Navn</label>
+                                <input type="text" name="title" class="form-control" placeholder="" />
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Nyhetsbilde <small>(lenke, valgfri)</small></label>
+                                <div class="input-group">
+                                    <input id="image" type="text" name="image" class="form-control" placeholder="" />
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default" onclick="openMediaBrowser();"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                    </div>
+                                </div>
+                                <div style="display:none;" class="mediaModal">
+                                    <iframe src="/fileman/index.html?integration=custom&type=image&txtFieldId=image" style="width:100%;height:100%" frameborder="0"></iframe>
+                                </div>
+                                <script>
+                                    function openMediaBrowser(){
+                                        $('div.mediaModal').dialog({modal:true, width:875,height:600});
+                                    }
+                                    function closeMediaBrowser(){
+                                        $('div.mediaModal').dialog('close');
+                                    }
+                                </script>
+                            </div>
+<?php if ($this->group): ?>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="frontPage" value="true" /> Vis nyhetsartikkelen på forsiden
+                                    </label>
+                                </div>
+                            </div>
+<?php endif; ?>
+                            <div class="form-group">
+                                <label for="ingress">Ingress <small>(kort oppsummert for forsiden / gruppesiden)</small></label>
+                                <textarea name="ingress" rows="4" style="width:100%;" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="html" rows="20" style="width:100%;" class="form-control tinymce"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Opprett nyhetsartikkel</button>
+                        </form>
+                    </div>
+                </div>
+<?php else: ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><?php if($this->group): ?><a href="/gruppe/<?php echo $this->group->id; ?>"><?php echo $this->group->title; ?></a> &raquo; <?php endif; ?><a href="/nyhet/<?php echo $this->article->id; ?>"><?php echo $this->article->title; ?></a> &raquo; Endre</h1>
+                        <form action="" method="POST" class="form-horizontal" role="form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="title">Navn</label>
+                                    <input type="text" name="title" value="<?php echo $this->article->title; ?>" class="form-control" placeholder="" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="image">Nyhetsbilde <small>(lenke, valgfri)</small></label>
+                                    <div class="input-group">
+                                        <input id="image" type="text" name="image" value="<?php echo $this->article->image; ?>" class="form-control" placeholder="" />
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default" onclick="openMediaBrowser();"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                        </div>
+                                    </div>
+                                    <div style="display:none;" class="mediaModal">
+                                        <iframe src="/fileman/index.html?integration=custom&type=image&txtFieldId=image" style="width:100%;height:100%" frameborder="0"></iframe>
+                                    </div>
+                                    <script>
+                                        function openMediaBrowser(){
+                                            $('div.mediaModal').dialog({modal:true, width:875,height:600});
+                                        }
+                                        function closeMediaBrowser(){
+                                            $('div.mediaModal').dialog('close');
+                                        }
+                                    </script>
+                                </div>
+<?php if ($this->group): ?>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="frontPage" value="true"<?php echo ($this->article->on_front_feed ? ' checked' : ''); ?> /> Vis nyhetsartikkelen på forsiden
+                                        </label>
+                                    </div>
+                                </div>
+<?php endif; ?>
+                                <div class="form-group">
+                                    <label for="ingress">Ingress <small>(kort oppsummert for forsiden / gruppesiden)</small></label>
+                                    <textarea name="ingress" rows="4" style="width:100%;" class="form-control"><?php echo $this->article->ingress; ?></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <textarea name="html" rows="20" style="width:100%;" class="form-control tinymce"><?php echo $this->article->body; ?></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
+                            <a href="/endre/nyheter/aid/<?php echo $this->article->id . '/act/delete'; ?>" onclick="if (!confirm('Er du sikker på at du vil slette arikkelen &laquo;<?php echo $this->article->title; ?>&raquo;?')) return false;" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Slett <small>(kan ikke angres)</small></a>
+                        </form>
+                    </div>
+                </div>
+<?php endif; ?>

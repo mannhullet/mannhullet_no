@@ -1,0 +1,18 @@
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-md-2 submenu">
+                        <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="340" data-offset-bottom="250">
+                            <li><a href="/om">Historie</a></li>
+                            <li class="active"><a href="/om/statutter">Statutter</a></li>
+                            <li><a href="/om/styret">Styret</a></li>
+                            <li><a href="/om/undergruppesjefer">Undergruppesjefer</a></li>
+                            <li><a href="/om/spr_ktr">ITV/KTR</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        <h1 style="margin-top:0;">Statutter</h1>
+<?php if ($this->user && $this->user->admin): ?>
+                        <p><a href="/endre/partial/pid/4" class="btn btn-default">Endre</a></p>
+<?php endif; ?>
+                        <?php echo Model_DbTable_Partials::getHtml('/om/statutter'); ?>
+                    </div>
+                </div>

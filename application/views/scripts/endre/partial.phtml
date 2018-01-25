@@ -1,0 +1,14 @@
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;">Endre "<?php echo $this->partial->uri; ?>"</h1>
+                        <form action="" method="POST" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <textarea name="html" rows="20" style="width:100%;" class="form-control tinymce"><?php echo $this->partial->body; ?></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
+                            <a href="javascript:history.go(-1)" class="btn btn-default">&laquo; Gå tilbake</a>
+                        </form>
+                    </div>
+                </div>

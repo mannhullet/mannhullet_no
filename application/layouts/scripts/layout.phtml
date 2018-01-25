@@ -1,0 +1,574 @@
+<!DOCTYPE HTML>
+<html lang="nb-no">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=800">
+    <meta name="description" content="">
+    <meta name="author" content="Petahz.no - Kristoffer A. Iversen">
+    <?php echo $this->headTitle('Mannhullet.no')->setSeparator(' » ') . PHP_EOL; ?>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+    <link href='http://fonts.googleapis.com/css?family=Economica|Source+Sans+Pro' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+<?php if ($this->lightbox): ?>
+    <link rel="stylesheet" href="/css/lightbox.css" />
+<?php endif; ?>
+    <link rel="stylesheet" href="/css/datepicker3.css">
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="col-xs-4 nav">
+                <ul class="nav nav-pills">
+                    <li<?php if($this->headerNav == '/') echo ' class="active"'; ?>><a href="/">Medlemsområde</a></li>
+                    <li<?php if($this->headerNav == '/nystudent') echo ' class="active"'; ?>><a href="/nystudent">Ny student</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-4 logo">
+                <a href="/"><img src="/img/logo2.png" width="210" height="134" alt="Mannhullets logo" />
+                </a>
+                <h1>MANNHULLET</h1>
+                <small>Linjeforeningen til Marin teknikk ved NTNU</small>
+            </div>
+            <div class="col-xs-4 user">
+<?php if (!$this->user): ?>
+                <form action="/registrer?ref=<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" role="form" class="login">
+                    <input type="hidden" name="act" value="login" />
+                    <div class="col-md-offset-4 col-md-8">
+                        <input type="text" name="email" value="" placeholder="Student e-post" class="form-control" />
+                        <input type="password" name="password" value="" placeholder="Passord" class="form-control" />
+                        <button type="submit" style="width:100%;" class="btn btn-default">Logg inn</button>
+                    </div>
+                    <div style="margin-top:10px;" class="col-md-offset-4 col-md-8">
+                        <a href="/registrer">eller registrer deg</a>
+                    </div>
+                </form>
+<?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="content">
+            <div id="container" class="container">
+                <ul id="mainnav" class="nav nav-pills mainnav">
+                    <li class="logo"><a href="#" onclick="$('html, body').animate({scrollTop:0}, 'slow');return false;"><img src="/img/logo-small-black.png" height="40" alt="Mannhullet logo" /></a></li>
+<?php if($this->headerNav == '/nystudent'): ?>
+                    <li<?php if ($this->mainnav == '/nystudent') echo ' class="active"'; ?>><a href="/nystudent"><span class="glyphicon glyphicon-home"></span> Steg for steg</a></li>
+                    <li<?php if ($this->mainnav == '/nystudent/kalender') echo ' class="active"'; ?>><a href="/nystudent/kalender">Kalender</a></li>
+                    <li<?php if ($this->mainnav == '/nystudent/kontakt') echo ' class="active"'; ?>><a href="/nystudent/kontakt">Prat med en student</a></li>
+<?php else: ?>
+                    <li<?php if ($this->mainnav == '/') echo ' class="active"'; ?>><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+                    <li<?php if ($this->mainnav == '/om') echo ' class="active"'; ?>><a href="/om">Om oss</a></li>
+                    <li<?php if ($this->mainnav == '/arrangement') echo ' class="active"'; ?>><a href="/arrangement">Arrangementer</a></li>
+                    <li class="dropdown<?php if ($this->mainnav == '/gruppe') echo ' active'; ?>">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Undergrupper <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+<?php foreach ($this->groups as $group): ?>
+                            <li<?php if ($this->secondarynav == '/gruppe/' . $group->id) echo ' class="active"'; ?>><a href="<?php echo ($group->isExternal() ? $group->external . '" target="_BLANK' : '/gruppe/' . $group->id); ?>"><?php echo $group->title; if ($group->isExternal()): ?> <span class="glyphicon glyphicon-link pull-right"></span><?php endif; ?><?php if ($group->color != null) echo '<span style="background-color:' . $group->color . ';" class="badge pull-right">&nbsp;</span> '; ?></a></li>
+<?php endforeach; ?>
+                        </ul>
+                    </li>
+<?php if ($this->user): ?>
+                    <li class="dropdown<?php if ($this->mainnav == '/memberarea') echo ' active'; ?>">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Arkiv <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li<?php if ($this->secondarynav == '/bilder') echo ' class="active"'; ?>><a href="/bilder">Bildegalleri</a></li>
+                            <li<?php if ($this->secondarynav == '/marina') echo ' class="active"'; ?>><a href="/marina">Marina</a></li>
+                            <li<?php if ($this->secondarynav == '/nths') echo ' class="active"'; ?>><a href="/dokumenter">Dokumenter</a></li>
+                        </ul>
+                    </li>
+<?php endif; ?>
+<?php endif; ?>
+                    <li class="logo"><a href="#" onclick="$('html, body').animate({scrollTop:0}, 'slow');return false;"><img src="/img/logo-small-black.png" height="40" alt="Mannhullet logo" /></a></li>
+                </ul>
+<?php echo $this->layout()->content; ?>
+            </div>
+        </div>
+        <div id="footer" style="opacity:0;" class="footer" data-bottom-top="opacity:0;" data-0-bottom-center="opacity:1;">
+            <div class="container">
+                <div style="padding-top:30px;" class="col-md-4">
+<?php if ($this->sponsor): ?>
+                    <p>Sponsor</p>
+                    <?php if ($this->sponsor->href != null): ?><a href="<?php echo $this->sponsor->href; ?>" target="_BLANK"><?php endif; ?><img src="<?php echo $this->sponsor->image; ?>" width="150" alt="" /><?php if ($this->sponsor->href != null): ?></a><?php endif; ?>
+<?php endif; ?>
+                </div>
+                <div class="col-md-4">
+                    <h3>Takk for besøket</h3>
+                    <br />
+                    <a href="#" onclick="$('html, body').animate({scrollTop:0}, 'slow');return false;">
+                        <span class="glyphicon glyphicon-arrow-up"></span><br />
+                        Gå til toppen
+                    </a>
+                </div>
+                <div style="padding-top:30px;" class="col-md-4">
+<?php if ($this->socialIconFacebook || $this->socialIconTwitter): ?>
+                    <p>Besøk oss på</p>
+                    <div class="social-icons">
+<?php if ($this->socialIconFacebook): ?>
+                        <a href="<?php echo $this->socialIconFacebook; ?>" target="_BLANK"><i class="fa fa-facebook-square"></i><i class="fa fa-facebook-square grey"></i></a>
+<?php endif; if ($this->socialIconTwitter): ?>
+                        <a href="<?php echo $this->socialIconTwitter; ?>" target="_BLANK"><i class="fa fa-twitter-square"></i><i class="fa fa-twitter-square grey"></i></a>
+<?php endif; ?>
+                    </div>
+<?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php if ($this->user): ?>
+    <div class="userMenu">
+        <div class="dropdown clearfix">
+            <button type="button" class="btn btn-default dropdown-toggle text-right" data-toggle="dropdown"><?php echo $this->user->name; ?> <span class="caret"></span></button>
+            <ul style="right:0;" class="dropdown-menu">
+<?php $groupsImAdminFor = $this->user->getGroupsImAdminFor(); if ($this->user->admin || count($groupsImAdminFor) > 0): ?>
+<?php if ($this->user->admin): ?>
+                <li class="dropdown-header">Innholdsadministrasjon</li>
+                <li<?php if ($this->mainnav == '/opprettnyhet') echo ' class="active"'; ?>><a href="/endre/nyheter">Ny nyhet</a></li>
+                <li<?php if ($this->mainnav == '/opprettarrangement') echo ' class="active"'; ?>><a href="/endre/arrangementer">Nytt arrangement</a></li>
+                <li class="divider"></li>
+<?php endif; ?>
+                <li class="dropdown-header">Sideadministrasjon</li>
+<?php if ($this->user->admin): ?>
+                <li<?php if ($this->mainnav == '/admin') echo ' class="active"'; ?>><a href="/admin">Adminpanel</a></li>
+<?php endif; foreach ($groupsImAdminFor as $adminGroup): foreach ($this->groups as $group): if ($group->id !== $adminGroup->group_id) continue; ?>
+                <li><a href="/gruppe/<?php echo $group->id; ?>"><?php echo $group->title; ?></a></li>
+<?php endforeach; endforeach; ?>
+                <li class="divider"></li>
+<?php endif; ?>
+                <li class="dropdown-header">Kontovalg</li>
+                <li><a href="/innstillinger">Kontoinnstillinger</a></li>
+                <li><a href="/loggut">Logg ut</a></li>
+            </ul>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if ($this->mainnav != '/' && $this->mainnav != '/nystudent'): ?>
+    <script>
+        var docHeight = function() {
+            var body = document.body,
+                html = document.documentElement;
+            return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+        };
+
+        var isMobileDevice = false;
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            isMobileDevice = true;
+        }
+
+        // Scroll down to the sticky menu, ignoring the header for most pages.
+        window.scrollTo(0, 290);
+
+        if (window.height < docHeight()-400 && !isMobileDevice) { // This if is a bugfix for small pages in large browsers (resolution)
+            var elm = document.getElementById('mainnav');
+            elm.className = elm.className + ' navstick';
+            document.getElementById('container').style.paddingTop = '30px';
+        }
+    </script>
+<?php endif; ?>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="/js/bootstrap.js"></script> <!-- Slightly modified bootstrap 3.2.0 that fixes a tooltip-/popover-placement issue (ref. https://github.com/twbs/bootstrap/commit/6b659a8f61cd0ff52e32af5eaa256e29a07e9050) -->
+    <script src="/js/skrollr.min.js"></script>
+    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="/js/locales/bootstrap-datepicker.nb.js"></script>
+<?php if ($this->lightbox): ?>
+    <script src="/js/lightbox.min.js"></script>
+<?php endif; ?>
+<?php if ($this->tinymce): ?>
+    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            tinymce.init({
+                selector: 'form textarea.tinymce',
+                plugins: ["image", "colorpicker", "textcolor", "autoresize", "contextmenu", "media", "table", "link", "autolink"],
+                contextmenu: "link image inserttable | cell row column deletetable",
+                toolbar: "undo redo | styleselect | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | image media",
+                image_advtab: true,
+                file_browser_callback: RoxyFileBrowser,
+                image_class_list: [
+                    {title: 'Pyntekant', value: 'thumbnail'},
+                    {title: 'Ingen kant', value: ''},
+                ],
+            });
+            function RoxyFileBrowser(field_name, url, type, win) {
+                var roxyFileman = '/fileman/index.html';
+                if (roxyFileman.indexOf("?") < 0) {     
+                    roxyFileman += "?type=" + type;   
+                }else{
+                    roxyFileman += "&type=" + type;
+                }
+                roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value;
+                tinyMCE.activeEditor.windowManager.open({
+                    file: roxyFileman,
+                    title: 'Mannhullet media',
+                    width: 850, 
+                    height: 650,
+                    resizable: "yes",
+                    plugins: "media",
+                    inline: "yes",
+                    close_previous: "no"  
+                }, {     window: win,     input: field_name    });
+                return false; 
+            }
+        });
+    </script>
+<?php endif; ?>
+<?php if ($this->typeahead): ?>
+    <script src="/js/typeahead.bundle.js"></script>
+    <script>
+        var substringMatcher = function(strs) {
+            return function findMatches(q, cb) {
+                var matches, substrRegex;
+                matches = [];
+                substrRegex = new RegExp(q, 'i');
+                $.each(strs, function(i, ob) {
+                    if (substrRegex.test(ob.name)) {
+                        matches.push(ob);
+                    }
+                });
+                cb(matches);
+            };
+        };
+        var members = [<?php foreach ($this->members as $member): ?>{email:'<?php echo $member->email; ?>',name:'<?php echo str_replace("'", '', $member->name) . ' (' . reset(explode('@', $member->email)) . ')'; ?>'},<?php endforeach; ?>];
+        $('input.typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        }, {
+            name: 'members',
+            displayKey: 'name',
+            source: substringMatcher(members)
+        });
+        var userChosenEvent = function(e, suggestion, dataSetName) {
+            $('input[name=email]').val(suggestion.email);
+        };
+        $('input.typeahead').on('typeahead:selected', userChosenEvent);
+        $('input.typeahead').on('typeahead:autocompleted', userChosenEvent);
+    </script>
+<?php endif; ?>
+    <script src="/js/main.js"></script>
+<?php if ($this->gruppesiderSortableJS): ?>
+    <script>
+        $(document).ready(function() {
+            $("#sortable").sortable({
+                handle: 'td.moveHandle',
+                update: function(e, ui) {
+                    var list = [];
+                    $('#sortable tr').each(function() {
+                        list.push($(this).data('page-id'));
+                    });
+                    $.post('/endre/gruppesider/gid/<?php echo $this->group->id; ?>', {
+                        'act': 'reorder',
+                        'pageOrder': JSON.stringify(list),
+                    }, function( data ) {
+                        //console.log(data);
+                    });
+                },
+            }).disableSelection();
+        });
+    </script>
+<?php endif; ?>
+<?php if ($this->adminInnstillingerSortableJS): ?>
+    <script>
+        $(document).ready(function() {
+            $("#sortable-slides").sortable({
+                handle: 'td.moveHandle',
+                update: function(e, ui) {
+                    var list = [];
+                    $('#sortable-slides tr').each(function() {
+                        list.push($(this).data('slide-id'));
+                    });
+                    $.post('/admin/innstillinger', {
+                        'act': 'reorderSlide',
+                        'slideOrder': JSON.stringify(list),
+                    }, function( data ) {
+                        //console.log(data);
+                    });
+                },
+            }).disableSelection();
+
+            $("tbody.sortable-people").each(function() {
+                console.log(this);
+                $(this).sortable({
+                    handle: 'td.moveHandle',
+                    update: function(e, ui) {
+                        console.log('Updating people');
+                        var list = [];
+                        $(ui.item).parent().children().each(function() {
+                            list.push($(this).data('person-id'));
+                        });
+                        $.post('/admin/innstillinger', {
+                            'act': 'reorderPeople',
+                            'peopleOrder': JSON.stringify(list),
+                        }, function( data ) {
+                            console.log(data);
+                        });
+                    },
+                }).disableSelection();
+            });
+        });
+    </script>
+<?php endif; ?>
+<?php if ($this->opprettArrangementDatepicker): ?>
+    <script>
+        $('.input-daterange#datepicker').datepicker({
+            format: "mm/dd/yyyy",
+            weekStart: 1,
+            todayBtn: "linked",
+            language: "nb",
+            forceParse: false,
+            calendarWeeks: true,
+            todayHighlight: true
+        });
+        $('.input-daterange#datepicker2 input[name=signup_date]').datepicker({
+            format: "mm/dd/yyyy",
+            weekStart: 1,
+            todayBtn: "linked",
+            language: "nb",
+            forceParse: false,
+            calendarWeeks: true,
+            todayHighlight: true
+        });
+        $('.input-daterange#datepicker3 input[name=signup_close_date]').datepicker({
+            format: "mm/dd/yyyy",
+            weekStart: 1,
+            todayBtn: "linked",
+            language: "nb",
+            forceParse: false,
+            calendarWeeks: true,
+            todayHighlight: true
+        });
+    </script>
+<?php endif; ?>
+<?php if ($this->uploadWidget): ?>
+    <link type="text/css" rel="stylesheet" href="/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" />
+    <script type="text/javascript" src="/plupload/js/plupload.full.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/plupload/js/jquery.plupload.queue/jquery.plupload.queue.min.js" charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(function() {
+            $("#uploader").pluploadQueue({
+                runtimes : 'html5,flash,silverlight,html4',
+                url : "<?php echo $this->uploadWidgetDestination; ?>",
+                chunk_size : '1mb',
+                rename : true,
+                dragdrop: true,
+                filters : {
+                    max_file_size : '10mb',
+<?php if (isset($this->uploadWidgetFiletypes)): ?>
+                    mime_types: [
+<?php     if (isset($this->uploadWidgetFiletypes['images'])): ?>
+                        {title : "Image files", extensions : "jpg,jpeg,gif,png"},
+<?php     endif; ?>
+                    ]
+<?php endif; ?>
+                },
+                flash_swf_url : '/plupload/js/Moxie.swf',
+                silverlight_xap_url : '/plupload/js/Moxie.xap'
+            });
+        });
+    </script>
+<?php endif; ?>
+<?php if ($this->eventPayedAjax): ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var unpayedAttendeeClick = function(e) {
+                e.preventDefault();
+                var thisSelector = $(this);
+                $.post('/arrangement/' + $(this).data('event-id') + '/act/payedup', {'user_id': $(this).data('user-id')}, function(data, textStatus, jqXHR) {
+                    thisSelector.find('span').text('Betalt');
+                    thisSelector.find('span').removeClass('label-danger');
+                    thisSelector.find('span').addClass('label-primary');
+                    thisSelector.removeClass('unpayedAttendee');
+                    thisSelector.addClass('payedAttendee');
+                    $(thisSelector).unbind('click');
+                    $(thisSelector).click(payedAttendeeClick);
+                }).fail(function() {
+                    alert('Noe gikk galt. Har du internett tilkobling?');
+                });
+            };
+            var payedAttendeeClick = function(e) {
+                e.preventDefault();
+                var thisSelector = $(this);
+                $.post('/arrangement/' + $(this).data('event-id') + '/act/notPayedup', {'user_id': $(this).data('user-id')}, function(data, textStatus, jqXHR) {
+                    thisSelector.find('span').text('Ikke betalt');
+                    thisSelector.find('span').removeClass('label-primary');
+                    thisSelector.find('span').addClass('label-danger');
+                    thisSelector.removeClass('payedAttendee');
+                    thisSelector.addClass('unpayedAttendee');
+                    $(thisSelector).unbind('click');
+                    $(thisSelector).click(unpayedAttendeeClick);
+                }).fail(function() {
+                    alert('Noe gikk galt. Har du internett tilkobling?');
+                });
+            };
+            $('a.unpayedAttendee').click(unpayedAttendeeClick);
+            $('a.payedAttendee').click(payedAttendeeClick);
+        });
+    </script>
+<?php endif; ?>
+<?php if ($this->colorPicker): ?>
+    <script type="text/javascript" src="/js/please.min.js" charset="UTF-8"></script>
+<?php endif; ?>
+<?php if ($this->adminMembers): ?>
+    <script>
+        $(document).ready(function() {
+            var normalMembers = [
+<?php foreach ($this->members as $user): ?>
+                {
+                    'uid': <?php echo $user->id; ?>,
+                    'email': '<?php echo $user->email; ?>',
+                    'verified': '<?php echo $user->verificationCode == null ? 'true' : 'false'; ?>',
+                    'name': '<?php echo $user->name; ?>',
+<?php if ($user->id == $this->user->id): ?>
+                    'isCurrentUser': 'true'
+<?php endif; ?>
+                },
+<?php endforeach; ?>
+            ];
+            var registrationTokens = [
+<?php foreach ($this->registrationTokens as $user): ?>
+                {
+                    'uid': <?php echo $user->id; ?>,
+                    'email': '<?php echo $user->email; ?>',
+                    'name': '',
+                    'registrationToken': 'true'
+                },
+<?php endforeach; ?>
+            ];
+
+            var tableUsers = $('table#normalMembersTable');
+            var paginationUsers = $('div#normalMembersTablePagination span ul');
+
+            var tableRegistrationTokens = $('table#registrationTokenTable');
+            var paginationRegistrationTokens = $('div#registrationTokenTablePagination span ul');
+
+            var filterSearch = function(users, search) {
+                var matches, substrRegex;
+                matches = [];
+                substrRegex = new RegExp(search, 'i');
+                $.each(users, function(i, ob) {
+                    if (substrRegex.test(ob.name) || substrRegex.test(ob.email)) {
+                        matches.push(ob);
+                    }
+                });
+                return matches;
+            };
+
+            var page = 1;
+            var page2 = 1;
+
+            var loadRows = function(table, pagination, users, page, search) {
+
+                if (!page) page = 1;
+                if (search) users = filterSearch(users, search);
+
+                var itemsPerPage = 20;
+                var pageCount = Math.ceil(users.length / itemsPerPage);
+                if (page > pageCount) page = pageCount;
+                if (page < 1) page = 1;
+                var itemsOffset = (page-1) * itemsPerPage;
+                pagination.html('');
+
+                var isUsersTable = users.length == 0 || !users[0].registrationToken;
+
+                var active = (page == 1 ? ' class="disabled"' : '');
+                pagination.append('\
+                    <li' + active + '><a href="#" onclick="previousPage(\'' + (isUsersTable ? 'usersTable' : 'regrightTable') + '\');return false;">&laquo;</a></li>\
+                ');
+                for (var a = 1; a <= pageCount; a++) {
+                    active = (a == page ? ' class="active"' : '');
+                    pagination.append('\
+                        <li' + active + '><a href="#" onclick="gotoPage(\'' + (isUsersTable ? 'usersTable' : 'regrightTable') + '\', ' + a + ');return false;">' + a + '</a></li>\
+                    ');
+                }
+                active = (page == pageCount || pageCount == 0 ? ' class="disabled"' : '');
+                pagination.append('\
+                    <li' + active + '><a href="#" onclick="nextPage(\'' + (isUsersTable ? 'usersTable' : 'regrightTable') + '\');return false;">&raquo</a></li>\
+                ');
+
+                table.find('tbody').html('');
+                for (i in users) {
+
+                    if (i < itemsOffset) continue;
+                    if (i >= itemsOffset+itemsPerPage) break;
+
+                    var user = users[i];
+                    var trHtml = '\
+                        <tr>\
+                            ' + (user.registrationToken ? '' : '<td>' + user.name + '</td>') + '\
+                            <td>' + user.email + '</td>\
+                            ' + (user.verified ? '<td>' + (user.verified == "true" ? 'Verifisert' : 'Ikke verifisert') + '</td>' : '') + '\
+                            <td>\
+                                ' + (user.isCurrentUser ? '' : '<a href="/admin/medlemmer/act/delete/uid/' + user.uid + '" onclick="if (!confirm(\'Er du sikker på at du vil slette brukeren/registrasjonsretten ' + user.email + '?\')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>') + '\
+                            </td>\
+                        </tr>\
+                    ';
+                    table.find('tbody').append(trHtml);
+
+                }
+
+            };
+            loadRows(tableUsers, paginationUsers, normalMembers);
+            loadRows(tableRegistrationTokens, paginationRegistrationTokens, registrationTokens);
+
+            window.nextPage = function(t) {
+                var search = $('input.search').val();
+                if (t == 'usersTable') {
+                    page += 1;
+                    loadRows(tableUsers, paginationUsers, normalMembers, page, search);
+                }else{
+                    page2 += 1;
+                    loadRows(tableRegistrationTokens, paginationRegistrationTokens, registrationTokens, page2, search);
+                }
+            };
+            window.previousPage = function(t) {
+                var search = $('input.search').val();
+                if (t == 'usersTable') {
+                    page -= 1;
+                    loadRows(tableUsers, paginationUsers, normalMembers, page, search);
+                }else{
+                    page2 -= 1;
+                    loadRows(tableRegistrationTokens, paginationRegistrationTokens, registrationTokens, page2, search);
+                }
+            };
+            window.gotoPage = function(t, p) {
+                var search = $('input.search').val();
+                if (t == 'usersTable') {
+                    page = p;
+                    loadRows(tableUsers, paginationUsers, normalMembers, page, search);
+                }else{
+                    page2 = p;
+                    loadRows(tableRegistrationTokens, paginationRegistrationTokens, registrationTokens, page2, search);
+                }
+            };
+
+            $('input.search').keyup(function() {
+                page = 1;
+                page2 = 1;
+                loadRows(tableUsers, paginationUsers, normalMembers, 1, $(this).val());
+                loadRows(tableRegistrationTokens, paginationRegistrationTokens, registrationTokens, 1, $(this).val());
+            });
+        });
+    </script>
+<?php endif; ?>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-54494229-2', 'auto');
+        ga('send', 'pageview');
+    </script>
+</body>
+</html>

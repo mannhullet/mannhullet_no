@@ -1,0 +1,86 @@
+<?php if (!isset($this->page)): ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><a href="/gruppe/<?php echo $this->group->id; ?>"><?php echo $this->group->title; ?></a> &raquo; Administrer undersider</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3>Undersider</h3>
+<?php if (count($this->pages) > 0): ?>
+                        <table style="margin-top:10px;" class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:30px;"></th>
+                                    <th>Tittel</th>
+                                    <th>Mål</th>
+                                    <th>Sist endret</th>
+                                    <th>Handlinger</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sortable">
+<?php foreach ($this->pages as $page): ?>
+                                <tr data-page-id="<?php echo $page->id; ?>">
+                                    <td style="cursor:pointer;" class="moveHandle"><span class="glyphicon glyphicon-resize-vertical"></span></td>
+                                    <td><a href="/endre/gruppesider/gid/<?php echo $this->group->id . '/pid/' . $page->id; ?>"><?php echo $page->title; ?></a></td>
+                                    <td><?php echo ($page->isExternal() ? $page->external : 'Intern'); ?></td>
+                                    <td><?php echo ($page->updated == null ? 'Aldri' : date('H:i j/n/Y', $page->updated)); ?></td>
+                                    <td><a href="/endre/gruppesider/gid/<?php echo $this->group->id . '/pid/' . $page->id . '/act/delete'; ?>" onclick="if(!confirm('Er du sikker på at du vil slette undersiden &laquo;<?php echo $page->title; ?>&raquo;')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett underside</a></td>
+                                </tr>
+<?php endforeach; ?>
+                            </tbody>
+                        </table>
+<?php else: ?>
+                        <div style="margin-top:30px;" class="alert alert-info">
+                            Det er ikke opprettet noe underside enda, det kan du gjøre i formen til høyre.
+                        </div>
+<?php endif; ?>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>Opprett ny underside</h3>
+                        <form action="" method="post" role="form">
+                            <div class="form-group">
+                                <label for="title">Navn</label>
+                                <input type="text" name="title" class="form-control" placeholder="" />
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="isExternal" value="external" onclick="$('div.external').toggleClass('hide');" /> Dette skal være en ekstern side
+                                </label>
+                            </div>
+                            <div class="external hide">
+                                <div class="form-group">
+                                    <label for="external">Lenke til ekstern side</label>
+                                    <input type="text" name="external" class="form-control" placeholder="" />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Opprett underside</button>
+                        </form>
+                    </div>
+                </div>
+<?php else: ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><a href="/gruppe/<?php echo $this->group->id; ?>"><?php echo $this->group->title; ?></a> &raquo; <a href="/endre/gruppesider/gid/<?php echo $this->group->id; ?>">Adm. Undersider</a> &raquo; <?php echo $this->page->title; ?></h1>
+                        <form action="" method="POST" class="form-horizontal" role="form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="title">Navn</label>
+                                    <input type="text" name="title" value="<?php echo $this->page->title; ?>" class="form-control" placeholder="" />
+                                </div>
+<?php if ($this->page->isExternal()): ?>
+                                <div class="form-group">
+                                    <label for="external">Lenke til ekstern side</label>
+                                    <input type="text" name="external" value="<?php echo $this->page->external; ?>" class="form-control" placeholder="" />
+                                </div>
+<?php else: ?>
+                                <div class="form-group">
+                                    <textarea name="html" rows="20" style="width:100%;" class="form-control tinymce"><?php echo $this->page->body; ?></textarea>
+                                </div>
+<?php endif; ?>
+                            </div>
+                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
+                        </form>
+                    </div>
+                </div>
+<?php endif; ?>

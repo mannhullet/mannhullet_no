@@ -1,0 +1,6 @@
+                <div class="row">
+                    <div class="col-md-12 nystudent">
+                        <h2>Prat med en student<?php if ($this->user && $this->user->admin == 1): ?><span class="pull-right"><a href="/endre/partial/pid/13" class="btn btn-default">Endre</a></span><?php endif; ?></h2>
+                        <p><?php echo Model_DbTable_Partials::getHtml('/nystudent/stegforsteg:kontakt'); ?></p>
+                    </div>
+                </div>

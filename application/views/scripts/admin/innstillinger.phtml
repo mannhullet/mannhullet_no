@@ -1,0 +1,641 @@
+<?php $mediaModal = 0; ?>
+                <div style="margin-top:30px;" class="row">
+<?php include(__DIR__.'/menu.phtml'); ?>
+                    <div class="col-sm-12 col-md-10">
+                        <h1 style="margin-top:0;">Innstillinger</h1>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3>Forsiden &raquo; Karusell</h3>
+<?php if (count($this->slides) == 0): ?>
+                                <div class="alert alert-info">
+                                    Ingen slides enda.
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th>Tittel</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sortable-slides">
+<?php foreach ($this->slides as $slide): ?>
+                                        <tr data-slide-id="<?php echo $slide->id; ?>">
+                                            <td class="moveHandle"><span class="glyphicon glyphicon-resize-vertical"></span></td>
+                                            <td><?php echo $slide->title; ?></td>
+                                            <td>
+                                                <a href="#" onclick="$('div.slideToEdit').addClass('hide');$('div.slideToEdit[data-slide-id=\'<?php echo $slide->id; ?>\']').removeClass('hide');return false;"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                                                &nbsp; &nbsp;
+                                                <a href="/admin/innstillinger/act/deleteslide/sid/<?php echo $slide->id; ?>" onclick="if (!confirm('Er du sikker på at du vil slette sliden &laquo;<?php echo strip_tags($slide->title); ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
+                                            </td>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php foreach ($this->slides as $slide): ?>
+                                <div class="slideToEdit well<?php if (!isset($this->errorEditSlide) || $this->errorEditSlide['id'] != $slide->id) echo ' hide'; ?>" data-slide-id="<?php echo $slide->id; ?>">
+                                    <h4>Slides &raquo; Endre &raquo; <?php echo $slide->title; ?><span class="pull-right"><button type="button" class="close" onclick="$('div.slideToEdit').addClass('hide');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></span></h4>
+<?php if (isset($this->errorEditSlide) && $this->errorEditSlide['id'] == $slide->id): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorEditSlide['error']; ?>
+                                </div>
+<?php endif; ?>
+                                    <form action="" method="POST" class="form-horizontal clearfix">
+                                        <div class="col-xs-12">
+                                            <input type="hidden" name="act" value="editSlide" />
+                                            <input type="hidden" name="sid" value="<?php echo $slide->id; ?>" />
+                                            <div class="form-group">
+                                                <label for="title">Tittel</label>
+                                                <input type="text" name="title" value="<?php echo $slide->title; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="image">Bakgrunnsbilde</label>
+                                                <div class="input-group">
+                                                    <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" value="<?php echo $slide->image; ?>" class="form-control" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                    </div>
+                                                </div>
+                                                <div style="display:none;" class="mediaModal <?php echo 'mediaModal-' . ($mediaModal-1); ?>">
+                                                    <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=<?php echo urlencode('image' . ($mediaModal-1)); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="body">Tekst</label>
+                                                <textarea name="body" rows="5" class="form-control"><?php echo $slide->body; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" name="submit" value="edit" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span> Endre slide</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+<?php endforeach; ?>
+<?php endif; ?>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>Opprett ny slide</h3>
+<?php if ($this->errorCreateSlide): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorCreateSlide; ?>
+                                </div>
+<?php endif; ?>
+                                <form action="" method="POST" class="form-horizontal">
+                                    <div class="col-xs-12">
+                                        <input type="hidden" name="act" value="createSlide" />
+                                        <div class="form-group">
+                                            <label for="title">Tittel</label>
+                                            <input type="text" name="title" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image">Bakgrunnsbilde</label>
+                                            <div class="input-group">
+                                                <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" class="form-control" />
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                </div>
+                                            </div>
+                                            <div style="display:none;" class="mediaModal mediaModal-<?php echo ($mediaModal-1); ?>">
+                                                <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=image<?php echo ($mediaModal-1); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="body">Tekst</label>
+                                            <textarea name="body" rows="5" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="index">Plassering</label>
+                                            <select name="index" class="form-control">
+                                                <option value="0">Fremst</option>
+                                                <option value="999">Bakerst</option>
+<?php foreach ($this->slides as $slide): ?>
+                                                <option value="<?php echo ($slide->order + 1); ?>">Etter &laquo;<?php echo $slide->title;?>&raquo;</option>
+<?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Opprett slide</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3>Om oss &raquo; Personer</h3>
+                                <h4>Styret</h4>
+<?php if (count($this->personsStyret) == 0): ?>
+                                <div class="alert alert-info">
+                                    Ingen personer lagt til enda.
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:20px;"></th>
+                                            <th>Navn</th>
+                                            <th>Tittel</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="sortable-people">
+<?php foreach ($this->personsStyret as $person): ?>
+                                        <tr data-person-id="<?php echo $person->id; ?>">
+                                            <td class="moveHandle"><span class="glyphicon glyphicon-resize-vertical"></span></td>
+                                            <td><?php echo $person->name; ?></td>
+                                            <td><?php echo $person->title; ?></td>
+                                            <td>
+                                                <a href="#" onclick="$('div.personToEdit').addClass('hide');$('div.personToEdit[data-person-id=\'<?php echo $person->id; ?>\']').removeClass('hide');return false;"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                                                &nbsp; &nbsp;
+                                                <a href="/admin/innstillinger/act/deleteperson/pid/<?php echo $person->id; ?>" onclick="if (!confirm('Er du sikker på at du vil fjerne personen &laquo;<?php echo $person->name; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Fjern</a>
+                                            </td>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php foreach ($this->personsStyret as $person): ?>
+                                <div class="personToEdit well<?php if (!isset($this->errorEditPerson) || $this->errorEditPerson['id'] != $person->id) echo ' hide'; ?>" data-person-id="<?php echo $person->id; ?>">
+                                    <h4>Styret &raquo; Endre &raquo; <?php echo $person->name; ?><span class="pull-right"><button type="button" class="close" onclick="$('div.personToEdit').addClass('hide');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></span></h4>
+<?php if (isset($this->errorEditPerson) && $this->errorEditPerson['id'] == $person->id): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorEditPerson['error']; ?>
+                                </div>
+<?php endif; ?>
+                                    <form action="" method="POST" class="form-horizontal clearfix">
+                                        <div class="col-xs-12">
+                                            <input type="hidden" name="act" value="editPerson" />
+                                            <input type="hidden" name="pid" value="<?php echo $person->id; ?>" />
+                                            <div class="form-group">
+                                                <label for="image">Profilbilde</label>
+                                                <div class="input-group">
+                                                    <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" value="<?php echo $person->image; ?>" class="form-control" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                    </div>
+                                                </div>
+                                                <div style="display:none;" class="mediaModal <?php echo 'mediaModal-' . ($mediaModal-1); ?>">
+                                                    <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=<?php echo urlencode('image' . ($mediaModal-1)); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Navn</label>
+                                                <input type="text" name="name" value="<?php echo $person->name; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Tittel <small>(valgfri)</small></label>
+                                                <input type="text" name="title" value="<?php echo $person->title; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contact_info">Kontaktinfo <small>(én per linje, valgfri)</small></label>
+                                                <textarea name="contact_info" rows="3" class="form-control"><?php echo $person->contact_info; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="popover">Tekst <small>(popover, valgfri)</small></label>
+                                                <textarea name="popover" rows="5" class="form-control"><?php echo $person->popover; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span> Endre person</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+<?php endforeach; ?>
+<?php endif; ?>
+                                <h4>Undergruppesjefer</h4>
+<?php if (count($this->personsGruppesjefer) == 0): ?>
+                                <div class="alert alert-info">
+                                    Ingen personer lagt til enda.
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:20px;"></th>
+                                            <th>Navn</th>
+                                            <th>Tittel</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="sortable-people">
+<?php foreach ($this->personsGruppesjefer as $person): ?>
+                                        <tr data-person-id="<?php echo $person->id; ?>">
+                                            <td class="moveHandle"><span class="glyphicon glyphicon-resize-vertical"></span></td>
+                                            <td><?php echo $person->name; ?></td>
+                                            <td><?php echo $person->title; ?></td>
+                                            <td>
+                                                <a href="#" onclick="$('div.personToEdit').addClass('hide');$('div.personToEdit[data-person-id=\'<?php echo $person->id; ?>\']').removeClass('hide');return false;"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                                                &nbsp; &nbsp;
+                                                <a href="/admin/innstillinger/act/deleteperson/pid/<?php echo $person->id; ?>" onclick="if (!confirm('Er du sikker på at du vil fjerne personen &laquo;<?php echo $person->name; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Fjern</a>
+                                            </td>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php foreach ($this->personsGruppesjefer as $person): ?>
+                                <div class="personToEdit well<?php if (!isset($this->errorEditPerson) || $this->errorEditPerson['id'] != $person->id) echo ' hide'; ?>" data-person-id="<?php echo $person->id; ?>">
+                                    <h4>Undergruppesjefer &raquo; Endre &raquo; <?php echo $person->name; ?><span class="pull-right"><button type="button" class="close" onclick="$('div.personToEdit').addClass('hide');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></span></h4>
+<?php if (isset($this->errorEditPerson) && $this->errorEditPerson['id'] == $person->id): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorEditPerson['error']; ?>
+                                </div>
+<?php endif; ?>
+                                    <form action="" method="POST" class="form-horizontal clearfix">
+                                        <div class="col-xs-12">
+                                            <input type="hidden" name="act" value="editPerson" />
+                                            <input type="hidden" name="pid" value="<?php echo $person->id; ?>" />
+                                            <div class="form-group">
+                                                <label for="image">Profilbilde</label>
+                                                <div class="input-group">
+                                                    <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" value="<?php echo $person->image; ?>" class="form-control" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                    </div>
+                                                </div>
+                                                <div style="display:none;" class="mediaModal <?php echo 'mediaModal-' . ($mediaModal-1); ?>">
+                                                    <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=<?php echo urlencode('image' . ($mediaModal-1)); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Navn</label>
+                                                <input type="text" name="name" value="<?php echo $person->name; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Tittel <small>(valgfri)</small></label>
+                                                <input type="text" name="title" value="<?php echo $person->title; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contact_info">Kontaktinfo <small>(én per linje, valgfri)</small></label>
+                                                <textarea name="contact_info" rows="3" class="form-control"><?php echo $person->contact_info; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="popover">Tekst <small>(popover, valgfri)</small></label>
+                                                <textarea name="popover" rows="5" class="form-control"><?php echo $person->popover; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span> Endre person</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+<?php endforeach; ?>
+<?php endif; ?>
+                                <h4>SPR</h4>
+<?php if (count($this->personsSpr) == 0): ?>
+                                <div class="alert alert-info">
+                                    Ingen personer lagt til enda.
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:20px;"></th>
+                                            <th>Navn</th>
+                                            <th>Tittel</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="sortable-people">
+<?php foreach ($this->personsSpr as $person): ?>
+                                        <tr data-person-id="<?php echo $person->id; ?>">
+                                            <td class="moveHandle"><span class="glyphicon glyphicon-resize-vertical"></span></td>
+                                            <td><?php echo $person->name; ?></td>
+                                            <td><?php echo $person->title; ?></td>
+                                            <td>
+                                                <a href="#" onclick="$('div.personToEdit').addClass('hide');$('div.personToEdit[data-person-id=\'<?php echo $person->id; ?>\']').removeClass('hide');return false;"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                                                &nbsp; &nbsp;
+                                                <a href="/admin/innstillinger/act/deleteperson/pid/<?php echo $person->id; ?>" onclick="if (!confirm('Er du sikker på at du vil fjerne personen &laquo;<?php echo $person->name; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Fjern</a>
+                                            </td>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php foreach ($this->personsSpr as $person): ?>
+                                <div class="personToEdit well<?php if (!isset($this->errorEditPerson) || $this->errorEditPerson['id'] != $person->id) echo ' hide'; ?>" data-person-id="<?php echo $person->id; ?>">
+                                    <h4>SPR &raquo; Endre &raquo; <?php echo $person->name; ?><span class="pull-right"><button type="button" class="close" onclick="$('div.personToEdit').addClass('hide');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></span></h4>
+<?php if (isset($this->errorEditPerson) && $this->errorEditPerson['id'] == $person->id): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorEditPerson['error']; ?>
+                                </div>
+<?php endif; ?>
+                                    <form action="" method="POST" class="form-horizontal clearfix">
+                                        <div class="col-xs-12">
+                                            <input type="hidden" name="act" value="editPerson" />
+                                            <input type="hidden" name="pid" value="<?php echo $person->id; ?>" />
+                                            <div class="form-group">
+                                                <label for="image">Profilbilde</label>
+                                                <div class="input-group">
+                                                    <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" value="<?php echo $person->image; ?>" class="form-control" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                    </div>
+                                                </div>
+                                                <div style="display:none;" class="mediaModal <?php echo 'mediaModal-' . ($mediaModal-1); ?>">
+                                                    <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=<?php echo urlencode('image' . ($mediaModal-1)); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Navn</label>
+                                                <input type="text" name="name" value="<?php echo $person->name; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Tittel <small>(valgfri)</small></label>
+                                                <input type="text" name="title" value="<?php echo $person->title; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contact_info">Kontaktinfo <small>(én per linje, valgfri)</small></label>
+                                                <textarea name="contact_info" rows="3" class="form-control"><?php echo $person->contact_info; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="popover">Tekst <small>(popover, valgfri)</small></label>
+                                                <textarea name="popover" rows="5" class="form-control"><?php echo $person->popover; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span> Endre person</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+<?php endforeach; ?>
+<?php endif; ?>
+                                <h4>Ktr</h4>
+<?php if (count($this->personsKtr) == 0): ?>
+                                <div class="alert alert-info">
+                                    Ingen personer lagt til enda.
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:20px;"></th>
+                                            <th>Navn</th>
+                                            <th>Tittel</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="sortable-people">
+<?php foreach ($this->personsKtr as $person): ?>
+                                        <tr data-person-id="<?php echo $person->id; ?>">
+                                            <td class="moveHandle"><span class="glyphicon glyphicon-resize-vertical"></span></td>
+                                            <td><?php echo $person->name; ?></td>
+                                            <td><?php echo $person->title; ?></td>
+                                            <td>
+                                                <a href="#" onclick="$('div.personToEdit').addClass('hide');$('div.personToEdit[data-person-id=\'<?php echo $person->id; ?>\']').removeClass('hide');return false;"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                                                &nbsp; &nbsp;
+                                                <a href="/admin/innstillinger/act/deleteperson/pid/<?php echo $person->id; ?>" onclick="if (!confirm('Er du sikker på at du vil fjerne personen &laquo;<?php echo $person->name; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Fjern</a>
+                                            </td>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php foreach ($this->personsKtr as $person): ?>
+                                <div class="personToEdit well<?php if (!isset($this->errorEditPerson) || $this->errorEditPerson['id'] != $person->id) echo ' hide'; ?>" data-person-id="<?php echo $person->id; ?>">
+                                    <h4>KTR &raquo; Endre &raquo; <?php echo $person->name; ?><span class="pull-right"><button type="button" class="close" onclick="$('div.personToEdit').addClass('hide');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></span></h4>
+<?php if (isset($this->errorEditPerson) && $this->errorEditPerson['id'] == $person->id): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorEditPerson['error']; ?>
+                                </div>
+<?php endif; ?>
+                                    <form action="" method="POST" class="form-horizontal clearfix">
+                                        <div class="col-xs-12">
+                                            <input type="hidden" name="act" value="editPerson" />
+                                            <input type="hidden" name="pid" value="<?php echo $person->id; ?>" />
+                                            <div class="form-group">
+                                                <label for="image">Profilbilde</label>
+                                                <div class="input-group">
+                                                    <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" value="<?php echo $person->image; ?>" class="form-control" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                    </div>
+                                                </div>
+                                                <div style="display:none;" class="mediaModal <?php echo 'mediaModal-' . ($mediaModal-1); ?>">
+                                                    <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=<?php echo urlencode('image' . ($mediaModal-1)); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Navn</label>
+                                                <input type="text" name="name" value="<?php echo $person->name; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Tittel <small>(valgfri)</small></label>
+                                                <input type="text" name="title" value="<?php echo $person->title; ?>" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contact_info">Kontaktinfo <small>(én per linje, valgfri)</small></label>
+                                                <textarea name="contact_info" rows="3" class="form-control"><?php echo $person->contact_info; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="popover">Tekst <small>(popover, valgfri)</small></label>
+                                                <textarea name="popover" rows="5" class="form-control"><?php echo $person->popover; ?></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span> Endre person</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+<?php endforeach; ?>
+<?php endif; ?>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>Opprett ny person</h3>
+<?php if ($this->errorCreatePerson): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorCreatePerson; ?>
+                                </div>
+<?php endif; ?>
+                                <form action="" method="POST" class="form-horizontal">
+                                    <div class="col-xs-12">
+                                        <input type="hidden" name="act" value="createPerson" />
+                                        <div class="form-group">
+                                            <label for="category">Velg kategori</label>
+                                            <select name="category" class="form-control">
+                                                <option value="styret">Styret</option>
+                                                <option value="gruppesjefer">Undergruppesjefer</option>
+                                                <option value="spr">SPR</option>
+                                                <option value="ktr">KTR</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image">Profilbilde</label>
+                                            <div class="input-group">
+                                                <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" class="form-control" />
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                </div>
+                                            </div>
+                                            <div style="display:none;" class="mediaModal mediaModal-<?php echo ($mediaModal-1); ?>">
+                                                <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=<?php echo urlencode('image' . ($mediaModal-1)); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name">Navn</label>
+                                            <input type="text" name="name" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="title">Tittel <small>(valgfri)</small></label>
+                                            <input type="text" name="title" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="contact_info">Kontaktinfo <small>(én per linje, valgfri)</small></label>
+                                            <textarea name="contact_info" rows="3" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="popover">Tekst <small>(popover, valgfri)</small></label>
+                                            <textarea name="popover" rows="5" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Opprett person</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3>Sponsorer</h3>
+<?php if (count($this->sponsors) == 0): ?>
+                                <div class="alert alert-info">
+                                    Ingen sponsorer enda.
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Tittel</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sortable-sponsors">
+<?php foreach ($this->sponsors as $sponsor): ?>
+                                        <tr data-slide-id="<?php echo $sponsor->id; ?>">
+                                            <td><?php echo $sponsor->title; ?></td>
+                                            <td><a href="/admin/innstillinger/act/deletesponsor/sid/<?php echo $sponsor->id; ?>" onclick="if (!confirm('Er du sikker på at du vil slette sponsoren &laquo;<?php echo $sponsor->title; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></td>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php endif; ?>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>Opprett ny slide</h3>
+<?php if ($this->errorCreateSponsor): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorCreateSponsor; ?>
+                                </div>
+<?php endif; ?>
+                                <form action="" method="POST" class="form-horizontal">
+                                    <div class="col-xs-12">
+                                        <input type="hidden" name="act" value="createSponsor" />
+                                        <div class="form-group">
+                                            <label for="title">Tittel</label>
+                                            <input type="text" name="title" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image3">Sponsorbilde <small>(150x66 px)</small></label>
+                                            <div class="input-group">
+                                                <input id="image<?php echo $mediaModal++; ?>" type="text" name="image" class="form-control" />
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" onclick="$('div.mediaModal-<?php echo ($mediaModal-1); ?> iframe').attr('src', function() {return $(this).data('src');});$('div.mediaModal-<?php echo ($mediaModal-1); ?>').dialog({modal:true, width:875,height:600});"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                                </div>
+                                            </div>
+                                            <div style="display:none;" class="mediaModal mediaModal-<?php echo ($mediaModal-1); ?>">
+                                                <iframe data-src="/fileman/index.html?integration=custom&type=image&txtFieldId=<?php echo urlencode('image' . ($mediaModal-1)); ?>" style="width:100%;height:100%" frameborder="0"></iframe>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="href">Lenke til nettsted <small>(valgfritt)</small></label>
+                                            <input type="text" name="href" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Legg til sponsor</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3>MBK Reservasjonssystem - Sertifikater</h3>
+<?php if (count($this->mbkCertificates) == 0): ?>
+                                <div class="alert alert-info">
+                                    Ingen sertifikater lagt inn enda.
+                                </div>
+<?php else: ?>
+                                <table class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Sertifikatnummer</th>
+                                            <th>Registrert til</th>
+                                            <th>Handlinger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+<?php foreach ($this->mbkCertificates as $certificate): ?>
+                                        <tr>
+                                            <td><?php echo $certificate->certificate_number; ?></td>
+                                            <td><?php $tempUser = $certificate->getUser(); echo ($tempUser->name ? $tempUser->name : $tempUser->email); ?></td>
+                                            <td><a href="/admin/innstillinger/act/deleteMBKCertificate/cid/<?php echo $certificate->certificate_number; ?>" onclick="if (!confirm('Er du sikker på at du vil slette sertifikatet &laquo;<?php echo $certificate->certificate_number; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></td>
+                                        </tr>
+<?php endforeach; ?>
+                                    </tbody>
+                                </table>
+<?php endif; ?>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>Opprett nytt sertifikat</h3>
+<?php if ($this->errorCreateCertificate): ?>
+                                <div class="alert alert-warning">
+                                    <?php echo $this->errorCreateCertificate; ?>
+                                </div>
+<?php endif; ?>
+                                <form action="" method="POST" class="form-horizontal">
+                                    <div class="col-xs-12">
+                                        <input type="hidden" name="act" value="createMBKCertificate" />
+                                        <div class="form-group">
+                                            <input type="text" name="name" value="" style="width:100%;" class="form-control typeahead" placeholder="Søk etter bruker" />
+                                            <input type="hidden" name="email" value="" class="form-control" placeholder="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Opprett sertifikat</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h3>Annet</h3>
+                                <form action="" method="POST" class="form-horizontal" role="form">
+                                    <input type="hidden" name="act" value="generic" />
+                                    <div class="form-group">
+                                        <label for="social_fb" class="col-sm-3 control-label">Sosial lenke – facebook</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" name="social_fb" value="<?php echo $this->socialIconFacebook; ?>" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="social_twtr" class="col-sm-3 control-label">Sosialt lenke – Twitter</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" name="social_twtr" value="<?php echo $this->socialIconTwitter; ?>" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <button type="submit" class="btn btn-success">Lagre endringer</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function closeMediaBrowser() {
+                        $('div.mediaModal').each(function() { if ($(this).hasClass('ui-dialog-content') == true) $(this).dialog('close'); });
+                    }
+                </script>

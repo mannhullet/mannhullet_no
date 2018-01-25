@@ -1,0 +1,18 @@
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-md-offset-2 col-md-8">
+<?php if ($this->user && ($this->user->admin || ($this->article->isGroupArticle() ? Model_DbTable_GroupAdmins::isGroupAdmin($this->user, $this->article->getGroup()) : false))): ?>
+                        <h1 style="margin-top:20px;"><?php if ($this->article->isGroupArticle()) echo '<a href="/gruppe/' . $this->article->getGroup()->id . '"' . ($this->article->getGroup()->color != null ? ' style="color:' . $this->article->getGroup()->color . ';"' : '') . '>' . $this->article->getGroup()->title . '</a> &raquo; '; echo $this->article->title; ?><span class="pull-right"><a href="/endre/nyheter/aid/<?php echo $this->article->id; ?>" class="btn btn-default">Endre</a></span></h1>
+<?php else: ?>
+                        <h1 style="margin-top:20px;"><?php if ($this->article->isGroupArticle()) echo '<a href="/gruppe/' . $this->article->getGroup()->id . '">' . $this->article->getGroup()->title . '</a> &raquo; '; echo $this->article->title; ?></h1>
+<?php endif; ?>
+                        <p><small>Publisert: <?php echo $this->article->getDateTime(true) . ($this->article->getDateTime(true) != $this->article->getDateTime(false) ? '. Sist endret: ' . $this->article->getDateTime(false) : ''); ?>.</small></p>
+                        <div style="overflow:hidden;">
+    <?php if ($this->article->image != null): ?>
+                            <div class="thumbnail">
+                                <img src="<?php echo $this->article->image; ?>" style="width:100%;" />
+                            </div>
+    <?php endif; ?>
+                        </div>
+                        <?php echo ($this->article->body == '' ? $this->article->ingress : $this->article->body); ?>
+                    </div>
+                </div>

@@ -1,0 +1,90 @@
+<?php if (count($this->slides) > 0): ?>
+            </div>
+            <div id="slider" style="opacity:0.2;" class="carousel slide" data-pause="" data-0="opacity:0.2;" data-300="opacity:1;">
+                <ol class="carousel-indicators">
+<?php foreach ($this->slides as $i => $slide): ?>
+                    <li data-target="#slider" data-slide-to="<?php echo $i; ?>"<?php if ($i == 0) echo ' class="active"'; ?>></li>
+<?php endforeach; ?>
+                </ol>
+                <div class="carousel-inner">
+<?php foreach ($this->slides as $i => $slide): ?>
+                    <div class="item<?php if ($i == 0) echo ' active'; ?>">
+                        <img src="<?php echo $slide->image; ?>" alt="<?php echo str_replace('"', "\\\"", $slide->title); ?>">
+                        <div class="carousel-caption">
+                            <h3><?php echo $slide->title; ?></h3>
+                            <p><?php echo $slide->body; ?></p>
+                        </div>
+                    </div>
+<?php endforeach; ?>
+                </div>
+                <a class="left carousel-control" href="#slider" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#slider" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+            <div class="container">
+<?php endif; ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-md-7"> <!--  col-md-pull-5 -->
+<?php if (count($this->news) > 0): foreach ($this->news as $news): ?>
+                        <div class="thumbnail post">
+<?php if ($news->image != null): ?>
+                            <a href="/nyhet/<?php echo $news->id; ?>"><img src="<?php echo $news->image; ?>" alt="Article cover image"></a>
+<?php endif; ?>
+                            <div class="caption">
+                                <h3><?php if ($news->isGroupArticle()) echo '<a href="/gruppe/' . $news->getGroup()->id . '"' . ($news->getGroup()->color != null ? ' style="color:' . $news->getGroup()->color . ';"' : '') . '>' . $news->getGroup()->title . '</a> &raquo; '; ?><a href="/nyhet/<?php echo $news->id; ?>" class="cap"><?php echo $news->title; ?></a></h3>
+                                <p><small>Publisert: <?php echo $news->getDateTime(true) . ($news->getDateTime(true) != $news->getDateTime(false) ? '. Sist endret: ' . $news->getDateTime(false) : ''); ?>.</small></p>
+                                <p><?php echo $news->ingress; ?></p>
+<?php if ($this->user && ($this->user->admin || ($news->isGroupArticle() ? Model_DbTable_GroupAdmins::isGroupAdmin($this->user, $news->getGroup()) : false))): ?>
+                                
+                                <p><a href="/nyhet/<?php echo $news->id; ?>" style="margin-right:10px;" class="btn btn-default" role="button">Les mer</a><a href="/endre/nyheter/aid/<?php echo $news->id; ?>" class="btn btn-default">Endre</a></p>
+<?php else: ?>
+                                <p><a href="/nyhet/<?php echo $news->id; ?>" class="btn btn-default" role="button">Les mer</a></p>
+<?php endif; ?>
+                            </div>
+                        </div>
+<?php endforeach; if ($this->pageCount > 1): ?>
+                            <div class="ul-center">
+                                <span>
+                                    <ul style="margin-top:0;" class="pagination pagination-sm">
+                                        <li<?php if (($this->pageNum-1) == 0) echo ' class="disabled"'; ?>><a href="<?php echo ($this->pageNum-1) == 0 ? '#' : '/page/' . ($this->pageNum-1); ?>">&laquo;</a></li>
+<?php for ($p = 1; $p <= $this->pageCount; $p++): ?>
+                                        <li<?php if ($this->pageNum == $p) echo ' class="active"'; ?>><a href="/page/<?php echo $p . '">' . $p; ?></a></li>
+<?php endfor; ?>
+                                        <li<?php if (($this->pageNum+1) > $this->pageCount) echo ' class="disabled"'; ?>><a href="<?php echo ($this->pageNum+1) > $this->pageCount ? '#' : '/page/' . ($this->pageNum+1); ?>">&raquo;</a></li>
+                                    </ul>
+                                </span>
+                            </div>
+<?php endif; else: ?>
+                        <div style="margin-top:30px;" class="alert alert-info">
+                            Det er ikke lagt ut nyheter enda
+                        </div>
+<?php endif; ?>
+                    </div>
+                    <div class="col-md-5">
+<?php if (count($this->events) > 0): ?>
+                        <h3>Kommende arrangementer</h3>
+                        <table style="width:100%;" class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:45%;">Tid / dato</th>
+                                    <th>Beskrivelse</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<?php foreach ($this->events as $event): ?>
+                                <tr data-post-id="<?php echo $event->id; ?>">
+                                    <td style="color:#777;vertical-align:middle;"><?php echo $event->getDateTime(); ?></td>
+                                    <td>
+                                        <a href="/arrangement/<?php echo $event->id; ?>"<?php if($event->isGroupEvent() && $event->getGroup()->color != null) echo ' style="color:' . $event->getGroup()->color . '";'; ?>><h3><?php echo $event->title; ?></h3></a>
+                                        <p><?php echo $event->ingress; ?></h3></p>
+                                    </td>
+                                </tr>
+<?php endforeach; ?>
+                            </tbody>
+                        </table>
+<?php endif; ?>
+                    </div>
+                </div>

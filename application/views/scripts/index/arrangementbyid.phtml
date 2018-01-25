@@ -1,0 +1,129 @@
+                <div class="row">
+                    <div class="col-md-12">
+<?php if ($this->user && ($this->user->admin || ($this->event->isGroupEvent() ? Model_DbTable_GroupAdmins::isGroupAdmin($this->user, $this->event->getGroup()) : false))): ?>
+                        <h1><a href="/arrangement">Arrangementer</a> &raquo; <?php echo $this->event->title; ?><span class="pull-right"><a href="/endre/arrangementer/aid/<?php echo $this->event->id; ?>" class="btn btn-default">Endre</a></span></h1>
+<?php else: ?>
+                        <h1><a href="/arrangement">Arrangementer</a> &raquo; <?php echo $this->event->title; ?></h1>
+<?php endif; ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+<?php if ($this->event->image != null): ?>
+                        <div class="thumbnail">
+                            <div style="width:100%;max-height:350px;overflow:hidden;"><img src="<?php echo $this->event->image; ?>" alt="" style="width:100%;" /></div>
+                        </div>
+<?php endif; ?>
+                        <p><?php echo $this->event->body; ?></p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Faktaboks</div>
+                            <div class="panel-body">
+                                <?php echo $this->event->getDateTime(); ?>
+                                <p>Lokalisjon: <span class="pull-right"><?php echo $this->event->location; ?></span></p>
+<?php if ($this->event->getOrgedBy()): ?>
+                                <p>Org. av: <?php if ($this->event->getGroup()->color != null) echo '<span style="background-color:' . $this->event->getGroup()->color . ';margin-left:10px;" class="badge pull-right">&nbsp;</span> '; ?><span class="pull-right"><?php echo $this->event->getOrgedByLink(); ?></span></p>
+<?php endif; ?>
+                            </div>
+                        </div>
+<?php if ($this->user && $this->event->isSignupOpen()): if ($this->userIsAttendee): ?>
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">Avmelding</div>
+                            <div class="panel-body">
+                                <form id="deregform" action="" method="POST">
+                                    <div class="input-control text-center">
+                                        <button class="btn btn-danger" onclick="if (!confirm('Sikker på at du vil melde deg av arrangementet?')) return false;$(this).attr('disabled', 'disabled');$('form#deregform').submit();"><span class="glyphicon glyphicon-remove"></span> Meld meg av nå</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+<?php elseif ($this->userIsOnWaitingList):  ?>
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">Venteliste (du er nummer <?php echo $this->waitingListSpot; ?> i køen)</div>
+                            <div class="panel-body">
+                                <form id="deregform2" action="" method="POST">
+                                    <div class="input-control text-center">
+                                        <button class="btn btn-danger" onclick="if (!confirm('Sikker på at du vil melde deg av arrangementet?')) return false;$(this).attr('disabled', 'disabled');$('form#deregform2').submit();"><span class="glyphicon glyphicon-remove"></span> Meld meg av nå</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+<?php else:  ?>
+                        <div class="panel panel-success">
+                            <div class="panel-heading">Påmelding</div>
+                            <div class="panel-body">
+                                <form id="regform" action="" method="POST">
+                                    <div class="input-control text-center">
+                                        <button class="btn btn-success" onclick="$(this).attr('disabled', 'disabled');$('form#regform').submit();"><span class="glyphicon glyphicon-ok"></span> Meld meg på nå</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+<?php endif; endif; ?>
+                        <div class="panel panel-mb">
+                            <div class="panel-heading">Påmeldte (<?php echo $this->event->participants_current . ' / ' . ($this->event->participants_max == 0 ? '&infin;' : $this->event->participants_max); if ($this->userIsSiteOrOwningGroupAdmin) echo ', ' . count($this->waitingList) . ' på ventelisten'; ?>)</div>
+                            <div class="panel-body">
+<?php if ($this->event->participants_max != 0): ?>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-mb" role="progressbar" aria-valuenow="<?php echo $this->event->participants_current; ?>" aria-valuemin="0" aria-valuemax="<?php echo $this->event->participants_max; ?>" style="width:<?php echo round($this->event->participants_current / $this->event->participants_max, 3) * 100;  ?>%;">
+                                        <?php echo $this->event->participants_current . ' / ' . $this->event->participants_max; ?>
+                                    </div>
+                                </div>
+<?php else: if (count($this->attendees) == 0): ?>
+                                <div class="alert alert-warning">
+                                    Ingen påmeldte enda
+                                </div>
+<?php else: if (!$this->user): ?>
+                                <div class="alert alert-warning">
+                                    Logg inn for å se hvem som er påmeldt
+                                </div>
+<?php endif; endif; endif; if (count($this->attendees) > 0 && $this->user): ?>
+                                <ul class="list-unstyled">
+<?php $atNum = 0; foreach ($this->attendees as $attendee): if ($attendee->isOnWaitingList()) continue; if ($this->userIsSiteOrOwningGroupAdmin && $attendee->payed) continue; if ($atNum++ == 10): // Non-payed-up attendees ?>
+                                    <div class="moreParticipants hide">
+<?php endif; ?>
+                                    <li><?php echo ($attendee->getUser()->name == '' ? $attendee->getUser()->email : $attendee->getUser()->name); ?><?php if ($this->userIsSiteOrOwningGroupAdmin): ?><a href="#" class="unpayedAttendee" data-event-id="<?php echo $this->event->id; ?>" data-user-id="<?php echo $attendee->user_id; ?>"><span class="pull-right label label-danger">Ikke betalt</span></a><?php endif; ?></li>
+<?php endforeach; ?>
+<?php if ($this->userIsSiteOrOwningGroupAdmin): ?>
+                                    <hr />
+<?php foreach ($this->attendees as $attendee): if ($attendee->isOnWaitingList()) continue; if (!$attendee->payed) continue; if ($atNum++ == 10): // Payed attendees ?>
+                                    <div class="moreParticipants hide">
+<?php endif; ?>
+                                    <li><?php echo $attendee->getUser()->name; ?><a href="#" class="payedAttendee" data-event-id="<?php echo $this->event->id; ?>" data-user-id="<?php echo $attendee->user_id; ?>"><span class="pull-right label label-primary">Betalt</span></a></li>
+<?php endforeach; endif; if ($atNum >= 10): ?>
+                                    </div>
+<?php endif; ?>
+                                </ul>
+<?php if ($atNum >= 10): ?>
+                                <a href="#" class="text-center display-block" onclick="$('ul div.moreParticipants').toggleClass('hide');$(this).find('#moreparticipants').toggleClass('hide');$(this).find('#fewerparticipants').toggleClass('hide');return false;"><span id="moreparticipants"><span class="glyphicon glyphicon-circle-arrow-down"></span> Se alle (<?php echo ($atNum-10); ?> fler)</span><span id="fewerparticipants" class="hide"><span class="glyphicon glyphicon-circle-arrow-up"></span> Se færre (<?php echo ($atNum-10); ?> mindre)</span></span></a>
+<?php endif; endif; ?>
+                            </div>
+                        </div>
+<?php if ($this->userIsSiteOrOwningGroupAdmin): ?>
+                        <div class="panel panel-mb">
+                            <div class="panel-heading">Ventelisten (kun synlig for admin / gruppeadmin)</div>
+                            <div class="panel-body">
+<?php if (count($this->waitingList) == 0): ?>
+                                <div class="alert alert-warning">
+                                    Ingen på ventelisten enda
+                                </div>
+<?php else: ?>
+                                <ul class="list-unstyled">
+<?php $atNum = 0; foreach ($this->waitingList as $attendee): if ($atNum++ == 5): ?>
+                                    <div class="moreParticipantsWaitingList hide">
+<?php endif; ?>
+                                    <li><?php echo ($attendee->getUser()->name == '' ? $attendee->getUser()->email : $attendee->getUser()->name); ?> <span class="pull-right label label-warning"><?php echo $atNum; ?></span></a></li>
+<?php endforeach; ?>
+<?php if ($atNum >= 5): ?>
+                                    </div>
+<?php endif; ?>
+                                </ul>
+<?php if ($atNum >= 5): ?>
+                                <a href="#" class="text-center display-block" onclick="$('ul div.moreParticipantsWaitingList').toggleClass('hide');$(this).find('#moreparticipantsWaitingList').toggleClass('hide');$(this).find('#fewerparticipantsWaitingList').toggleClass('hide');return false;"><span id="moreparticipantsWaitingList"><span class="glyphicon glyphicon-circle-arrow-down"></span> Se alle (<?php echo ($atNum-5); ?> fler)</span><span id="fewerparticipantsWaitingList" class="hide"><span class="glyphicon glyphicon-circle-arrow-up"></span> Se færre (<?php echo ($atNum-5); ?> mindre)</span></span></a>
+<?php endif; endif; ?>
+                            </div>
+                        </div>
+<?php endif; ?>
+                    </div>
+                </div>

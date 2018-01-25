@@ -1,0 +1,234 @@
+<?php if (!isset($this->event)): ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><a href="/arrangement">Arrangementer</a> &raquo; Opprett arrangement</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <form action="" method="post" role="form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title">Tittel</label>
+                                        <input type="text" name="title" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="location">Lokalisjon</label>
+                                        <input type="text" name="location" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="start_date">Start- / sluttdato</label>
+                                        <div id="datepicker" class="input-daterange input-group">
+                                            <input type="text" name="start_date" class="form-control" />
+                                            <span class="input-group-addon">til</span>
+                                            <input type="text" name="end_date" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="start_time">Start- / sluttidspunkt <small>(format: tt:mm)</small></label>
+                                        <div class="input-daterange input-group">
+                                            <input type="time" name="start_time" class="form-control" placeholder="tt:mm" />
+                                            <span class="input-group-addon">til</span>
+                                            <input type="time" name="end_time" class="form-control" placeholder="tt:mm" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="signup_date">Påmelding åpner</label>
+                                        <div id="datepicker2" class="input-daterange input-group">
+                                            <span style="border-left:1px solid #ccc;" class="input-group-addon">Dato</span>
+                                            <input type="text" name="signup_date" class="form-control" />
+                                            <span class="input-group-addon">Klokkeslett</span>
+                                            <input type="time" name="signup_time" class="form-control" placeholder="tt:mm" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="image">Arrangementbilde <small>(lenke, valgfri)</small></label>
+                                        <div class="input-group">
+                                            <input id="image" type="text" name="image" class="form-control" placeholder="" />
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default" onclick="openMediaBrowser();"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                            </div>
+                                        </div>
+                                        <div style="display:none;" class="mediaModal">
+                                            <iframe src="/fileman/index.html?integration=custom&type=image&txtFieldId=image" style="width:100%;height:100%" frameborder="0"></iframe>
+                                        </div>
+                                        <script>
+                                            function openMediaBrowser(){
+                                                $('div.mediaModal').dialog({modal:true, width:875,height:600});
+                                            }
+                                            function closeMediaBrowser(){
+                                                $('div.mediaModal').dialog('close');
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="max_participants">Antall plasser <small>(la være tom for "Ingen begrensning")</small></label>
+                                        <input type="number" name="max_participants" class="form-control" />
+                                    </div>
+                                </div>
+                                <div style="padding-top:0px;" class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="signup_date">Påmelding stenger (valgfri)</label>
+                                        <div id="datepicker3" class="input-daterange input-group">
+                                            <span style="border-left:1px solid #ccc;" class="input-group-addon">Dato</span>
+                                            <input type="text" name="signup_close_date" class="form-control" />
+                                            <span class="input-group-addon">Klokkeslett</span>
+                                            <input type="time" name="signup_close_time" class="form-control" placeholder="tt:mm" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div style="display:block;">
+                                    <label for="hiddenfrompub">Skjul arrangement for utenforstående</label>
+                                    <div style="margin-top:0;" class="checkbox">
+                                        <label><input type="checkbox" name="hiddenfrompub" /> Skjult fra allmennheten?</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ingress">Ingress <small>(kort oppsummert)</small></label>
+                                <textarea name="ingress" rows="4" style="width:100%;" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="html" rows="20" style="width:100%;" class="form-control tinymce"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Opprett arrangement</button>
+                        </form>
+                    </div>
+                </div>
+<?php else: ?>
+                <div style="margin-top:30px;" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="margin-top:0;"><a href="/arrangement">Arrangementer</a> &raquo; <a href="/arrangement/<?php echo $this->event->id; ?>"><?php echo $this->event->title; ?></a> &raquo; Endre</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="" method="POST" role="form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title">Tittel</label>
+                                        <input type="text" name="title" value="<?php echo $this->event->title; ?>" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="location">Lokalisjon</label>
+                                        <input type="text" name="location" value="<?php echo $this->event->location; ?>" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="start_date">Start- / sluttdato</label>
+                                        <div id="datepicker" class="input-daterange input-group">
+                                            <input type="text" name="start_date" value="<?php echo date('m/d/Y', $this->event->start_time); ?>" class="form-control" />
+                                            <span class="input-group-addon">til</span>
+                                            <input type="text" name="end_date" value="<?php echo date('m/d/Y', $this->event->end_time); ?>" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="start_time">Start- / sluttidspunkt <small>(format: tt:mm)</small></label>
+                                        <div class="input-daterange input-group">
+                                            <input type="time" name="start_time" value="<?php echo date('H:i', $this->event->start_time); ?>" class="form-control" placeholder="tt:mm" />
+                                            <span class="input-group-addon">til</span>
+                                            <input type="time" name="end_time" value="<?php echo date('H:i', $this->event->end_time); ?>" class="form-control" placeholder="tt:mm" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="signup_date">Påmelding åpner</label>
+                                        <div id="datepicker2" class="input-daterange input-group">
+                                            <span style="border-left:1px solid #ccc;" class="input-group-addon">Dato</span>
+                                            <input type="text" name="signup_date" value="<?php echo date('m/d/Y', $this->event->signup_open_time); ?>" class="form-control" />
+                                            <span class="input-group-addon">Klokkeslett</span>
+                                            <input type="time" name="signup_time" value="<?php echo date('H:i', $this->event->signup_open_time); ?>" class="form-control" placeholder="tt:mm" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="image">Arrangementbilde <small>(lenke, valgfri)</small></label>
+                                        <div class="input-group">
+                                            <input id="image" type="text" name="image" value="<?php echo $this->event->image; ?>" class="form-control" placeholder="" />
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default" onclick="openMediaBrowser();"><span class="glyphicon glyphicon-picture"></span> Hent</button>
+                                            </div>
+                                        </div>
+                                        <div style="display:none;" class="mediaModal">
+                                            <iframe src="/fileman/index.html?integration=custom&type=image&txtFieldId=image" style="width:100%;height:100%" frameborder="0"></iframe>
+                                        </div>
+                                        <script>
+                                            function openMediaBrowser(){
+                                                $('div.mediaModal').dialog({modal:true, width:875,height:600});
+                                            }
+                                            function closeMediaBrowser(){
+                                                $('div.mediaModal').dialog('close');
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="max_participants">Antall plasser <small>(la være tom for "Ingen begrensning")</small></label>
+                                        <input type="number" name="max_participants" value="<?php echo $this->event->participants_max; ?>" class="form-control" />
+                                    </div>
+                                </div>
+                                <div style="padding-top:0px;" class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="signup_date">Påmelding stenger (valgfri)</label>
+                                        <div id="datepicker3" class="input-daterange input-group">
+                                            <span style="border-left:1px solid #ccc;" class="input-group-addon">Dato</span>
+                                            <input type="text" name="signup_close_date" value="<?php if ($this->event->signup_close_time != null) echo date('m/d/Y', $this->event->signup_close_time); ?>" class="form-control" />
+                                            <span class="input-group-addon">Klokkeslett</span>
+                                            <input type="time" name="signup_close_time" value="<?php if ($this->event->signup_close_time != null) echo date('H:i', $this->event->signup_close_time); ?>" class="form-control" placeholder="tt:mm" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div style="display:block;">
+                                    <label for="hiddenfrompub">Skjul arrangement for utenforstående</label>
+                                    <div style="margin-top:0;" class="checkbox">
+                                        <label><input type="checkbox" name="hiddenfrompub" <?php echo ($this->event->hidden_from_public ? 'checked' : ''); ?> /> Skjult fra allmennheten?</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ingress">Ingress <small>(kort oppsummert)</small></label>
+                                <textarea name="ingress" rows="4" style="width:100%;" class="form-control"><?php echo $this->event->ingress; ?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="html" rows="20" style="width:100%;" class="form-control tinymce"><?php echo $this->event->body; ?></textarea>
+                            </div>
+                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
+                            <a href="/endre/arrangementer/aid/<?php echo $this->event->id . '/act/delete'; ?>" onclick="if (!confirm('Er du sikker på at du vil slette arikkelen &laquo;<?php echo $this->event->title; ?>&raquo;?')) return false;" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Slett <small>(kan ikke angres)</small></a>
+                        </form>
+                    </div>
+                </div>
+<?php endif; ?>
