@@ -91,9 +91,9 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
 
         $fileCollections = new self();
         $fileCollection = $fileCollections->createRow();
-
+        
         $fileCollection->title = $title;
-        $fileCollection->category = ($year ? $year : (date('M') >= 7 ? date('Y') . '/' . date('Y')+1 : date('Y')-1 . '/' . date('Y')));
+        $fileCollection->category = ($year ? $year : date('Y'));
         $fileCollection->collection = 'marinas';
         $fileCollection->created = time();
         $fileCollection->src = $src;
