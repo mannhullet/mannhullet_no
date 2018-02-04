@@ -73,7 +73,7 @@
                         </a>
                         <ul class="dropdown-menu">
 <?php foreach ($this->groups as $group): ?>
-                            <li<?php if ($this->secondarynav == '/gruppe/' . $group->id) echo ' class="active"'; ?>><a href="<?php echo ($group->isExternal() ? $group->external . '" target="_BLANK' : '/gruppe/' . $group->id); ?>" style="display:flex;"><?php echo '<span style="margin-right:20px; display:inline-block;flex:auto;">' . $group->title . '</span>'; if ($group->isExternal()): ?> <span class="glyphicon glyphicon-link;" style="flex:none;" ></span><?php endif; ?><?php if ($group->color != null) echo '<span style="background-color:' . $group->color . ';flex:none; height:18px" class="badge">&nbsp;</span> '; ?></a></li>
+                            <li<?php if ($this->secondarynav == '/gruppe/' . $group->id) echo ' class="active"'; ?>><a href="<?php echo ($group->isExternal() ? $group->external . '" target="_BLANK' : '/gruppe/' . $group->id); ?>" style="display:flex;"><?php echo '<span style="margin-right:20px; display:inline-block;flex:auto;">' . $group->title . '</span>'; if ($group->isExternal()): ?> <span class="glyphicon glyphicon-link" style="flex:none;" ></span><?php endif; ?><?php if ($group->color != null) echo '<span style="background-color:' . $group->color . ';flex:none; height:18px" class="badge">&nbsp;</span> '; ?></a></li>
 <?php endforeach; ?>
                         </ul>
                     </li>
