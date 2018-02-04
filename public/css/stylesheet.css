@@ -346,7 +346,7 @@ div.wrap div.content ul.mainnav > li.active > a {
 }
 
 div.wrap div.content ul.mainnav > li > ul.dropdown-menu {
-    width: 250px;
+    width: auto;
 }
 div.wrap div.content ul.mainnav > li > ul li {
     text-align: left;
@@ -682,4 +682,3 @@ div.stepbystep div.container div.row div.step p {
 div.col-xs-6.col-md-3.documentsTag h3 {
     word-wrap: break-word;
 }
-
