@@ -203,8 +203,8 @@
             });
             function RoxyFileBrowser(field_name, url, type, win) {
                 var roxyFileman = '/fileman/index.html';
-                if (roxyFileman.indexOf("?") < 0) {     
-                    roxyFileman += "?type=" + type;   
+                if (roxyFileman.indexOf("?") < 0) {
+                    roxyFileman += "?type=" + type;
                 }else{
                     roxyFileman += "&type=" + type;
                 }
@@ -212,14 +212,14 @@
                 tinyMCE.activeEditor.windowManager.open({
                     file: roxyFileman,
                     title: 'Mannhullet media',
-                    width: 850, 
+                    width: 850,
                     height: 650,
                     resizable: "yes",
                     plugins: "media",
                     inline: "yes",
-                    close_previous: "no"  
+                    close_previous: "no"
                 }, {     window: win,     input: field_name    });
-                return false; 
+                return false;
             }
         });
     </script>
@@ -379,7 +379,7 @@
         });
     </script>
 <?php endif; ?>
-<?php if ($this->eventPayedAjax): ?>
+<?php if ($this->event && $this->attendees): ?>
     <script type="text/javascript">
         $(document).ready(function () {
             var unpayedAttendeeClick = function(e) {
