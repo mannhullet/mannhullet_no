@@ -2,7 +2,8 @@
 
 class IndexController extends Zend_Controller_Action
 {
-    protected $user;
+
+    protected $user = null;
 
     public function init()
     {
@@ -51,6 +52,13 @@ class IndexController extends Zend_Controller_Action
     {
         $this->view->mainnav = '/om';
         $this->view->headTitle('Om oss');
+    }
+
+    public function omhistorieAction()
+    {
+        $this->view->mainnav = '/om';
+        $this->view->headTitle('Om oss');
+        $this->view->headTitle('Historie', 'PREPEND');
     }
 
     public function omstatutterAction()
