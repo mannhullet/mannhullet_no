@@ -15,7 +15,7 @@
             fontSize = fontSize - 1;
         } while ((/*textHeight > maxHeight ||*/ textWidth > maxWidth) && fontSize > 3);
         return this;
-    }
+    };
 })(jQuery);
 
 $(window).ready(function() {
@@ -62,7 +62,6 @@ $(window).ready(function() {
     }, smoothScrolling: true, forceHeight: false });
 
     // The slide effect of the header
-    var scrollTimer;
     var animating = false;
     var lastScrollTop = 0;
     var scrollDirection = 0;
@@ -92,22 +91,6 @@ $(window).ready(function() {
         if (lastScrollTop < cST) scrollDirection = 0;
         else scrollDirection = 1;
         lastScrollTop = cST;
-
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(function() {
-            if ($(window).scrollTop() > options.headerAnimation.height) return;
-            if (scrollDirection == 0) { // Scroll direction down
-                animating = true;
-                if (doAnimate) $('html, body').animate({scrollTop:options.headerAnimation.height}, options.headerAnimation.duration, 'easeInOutCirc', function() {
-                    animating = false;
-                });
-            }else{ // Scroll direction up
-                animating = true;
-                if (doAnimate) $('html, body').animate({scrollTop:0}, options.headerAnimation.duration, 'easeInOutCirc', function() {
-                    animating = false;
-                });
-            }
-        }, options.headerAnimation.timeout);
     };
     $(window).scroll(scrollHandler);
     scrollHandler();
@@ -115,7 +98,7 @@ $(window).ready(function() {
     // Make the main nav stick to the window-top
     var stickyFunc = function() {
         if (!doAnimate) return; // This fixes a bug where small pages messes up in large browser resolutions
-        if ($(window).scrollTop() > options.mainnav.stickHeight-10) {
+        if ($(window).scrollTop() > options.mainnav.stickHeight - 10) {
             $('ul.mainnav:first').addClass('navstick');
             $('div.wrap div.content div.container').css('padding-top', '30px');
         }else{
@@ -131,7 +114,7 @@ $(window).ready(function() {
         var topPos = 100; //$('div.header div.nav ul.nav').offset().top;
         var rightPos = $('div.header div.container').offset().left + 45;
 
-        if ($(window).width() < 750) rightPos = rightPos - (750-$(window).width())
+        if ($(window).width() < 750) rightPos = rightPos - (750-$(window).width());
         $('div.userMenu').css('top', topPos + 'px');
         $('div.userMenu').css('right', rightPos + 'px');
     };
