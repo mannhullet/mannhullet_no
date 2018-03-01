@@ -21,7 +21,7 @@ class AdminController extends Zend_Controller_Action
         Model_DbTable_Sessions::persistUserId();
 
         $this->view->socialIconFacebook = Model_DbTable_Partials::getHtml('/footer:socialIconFacebook');
-        $this->view->socialIconTwitter = Model_DbTable_Partials::getHtml('/footer:socialIconTwitter');
+        $this->view->socialIconInstagram = Model_DbTable_Partials::getHtml('/footer:socialIconInstagram');
 
         $sponsor = $this->view->sponsor = Model_DbTable_Sponsors::getSponsorRandom();
     }
@@ -306,13 +306,12 @@ class AdminController extends Zend_Controller_Action
                 return $this->_redirect('/admin/innstillinger');
             }else{
                 $socialFb = $this->_getParam('social_fb', '');
-                $socialTwtr = $this->_getParam('social_twtr', '');
+                $socialInsta = $this->_getParam('social_insta', '');
                 Model_DbTable_Partials::setHtml('/footer:socialIconFacebook', $socialFb);
-                Model_DbTable_Partials::setHtml('/footer:socialIconTwitter', $socialTwtr);
+                Model_DbTable_Partials::setHtml('/footer:socialIconInstagram', $socialInsta);
                 return $this->_redirect('/admin/innstillinger');
             }
 
         }
     }
 }
-

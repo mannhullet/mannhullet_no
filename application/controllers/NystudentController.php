@@ -19,7 +19,7 @@ class NystudentController extends Zend_Controller_Action
         Model_DbTable_Sessions::persistUserId();
 
         $this->view->socialIconFacebook = Model_DbTable_Partials::getHtml('/footer:socialIconFacebook');
-        $this->view->socialIconTwitter = Model_DbTable_Partials::getHtml('/footer:socialIconTwitter');
+        $this->view->socialIconInstagram = Model_DbTable_Partials::getHtml('/footer:socialIconInstagram');
 
         $sponsor = $this->view->sponsor = Model_DbTable_Sponsors::getSponsorRandom();
     }

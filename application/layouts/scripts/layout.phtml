@@ -119,13 +119,13 @@
                     </a>
                 </div>
                 <div style="padding-top:30px;" class="col-md-4">
-<?php if ($this->socialIconFacebook || $this->socialIconTwitter): ?>
+<?php if ($this->socialIconFacebook || $this->socialIconInstagram): ?>
                     <p>Besøk oss på</p>
                     <div class="social-icons">
 <?php if ($this->socialIconFacebook): ?>
-                        <a href="<?php echo $this->socialIconFacebook; ?>" target="_BLANK"><i class="fa fa-facebook-square"></i><i class="fa fa-facebook-square grey"></i></a>
-<?php endif; if ($this->socialIconTwitter): ?>
-                        <a href="<?php echo $this->socialIconTwitter; ?>" target="_BLANK"><i class="fa fa-twitter-square"></i><i class="fa fa-twitter-square grey"></i></a>
+                        <a href="<?php echo $this->socialIconFacebook; ?>" target="_BLANK"><i class="fa fa-facebook-square"></i></a>
+<?php endif; if ($this->socialIconInstagram): ?>
+                        <a href="<?php echo $this->socialIconInstagram; ?>" target="_BLANK"><i class="fa fa-instagram"></i></a>
 <?php endif; ?>
                     </div>
 <?php endif; ?>
