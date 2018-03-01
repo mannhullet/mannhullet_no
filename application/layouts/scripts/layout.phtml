@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=800">
     <meta name="description" content="">
     <meta name="author" content="Petahz.no - Kristoffer A. Iversen">
+    <meta property="og:image" content="http://www.mannhullet.no/img/nth_16.9.jpg" >
+    <link rel="icon" type="image/jpg" href="/img/favicon-32x32.jpg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+    <link rel="manifest" href="/img/site.webmanifest">
+    <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#404d75">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
     <?php echo $this->headTitle('Mannhullet.no')->setSeparator(' » ') . PHP_EOL; ?>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
@@ -73,7 +80,7 @@
                         </a>
                         <ul class="dropdown-menu">
 <?php foreach ($this->groups as $group): ?>
-                            <li<?php if ($this->secondarynav == '/gruppe/' . $group->id) echo ' class="active"'; ?>><a href="<?php echo ($group->isExternal() ? $group->external . '" target="_BLANK' : '/gruppe/' . $group->id); ?>"><?php echo $group->title; if ($group->isExternal()): ?> <span class="glyphicon glyphicon-link pull-right"></span><?php endif; ?><?php if ($group->color != null) echo '<span style="background-color:' . $group->color . ';" class="badge pull-right">&nbsp;</span> '; ?></a></li>
+                            <li<?php if ($this->secondarynav == '/gruppe/' . $group->id) echo ' class="active"'; ?>><a href="<?php echo ($group->isExternal() ? $group->external . '" target="_BLANK' : '/gruppe/' . $group->id); ?>" style="display:flex;"><?php echo '<span style="margin-right:20px; display:inline-block;flex:auto;">' . $group->title . '</span>'; if ($group->isExternal()): ?> <span class="glyphicon glyphicon-link" style="flex:none;" ></span><?php endif; ?><?php if ($group->color != null) echo '<span style="background-color:' . $group->color . ';flex:none; height:18px" class="badge">&nbsp;</span> '; ?></a></li>
 <?php endforeach; ?>
                         </ul>
                     </li>
@@ -112,13 +119,13 @@
                     </a>
                 </div>
                 <div style="padding-top:30px;" class="col-md-4">
-<?php if ($this->socialIconFacebook || $this->socialIconTwitter): ?>
+<?php if ($this->socialIconFacebook || $this->socialIconInstagram): ?>
                     <p>Besøk oss på</p>
                     <div class="social-icons">
 <?php if ($this->socialIconFacebook): ?>
-                        <a href="<?php echo $this->socialIconFacebook; ?>" target="_BLANK"><i class="fa fa-facebook-square"></i><i class="fa fa-facebook-square grey"></i></a>
-<?php endif; if ($this->socialIconTwitter): ?>
-                        <a href="<?php echo $this->socialIconTwitter; ?>" target="_BLANK"><i class="fa fa-twitter-square"></i><i class="fa fa-twitter-square grey"></i></a>
+                        <a href="<?php echo $this->socialIconFacebook; ?>" target="_BLANK"><i class="fa fa-facebook-square"></i></a>
+<?php endif; if ($this->socialIconInstagram): ?>
+                        <a href="<?php echo $this->socialIconInstagram; ?>" target="_BLANK"><i class="fa fa-instagram"></i></a>
 <?php endif; ?>
                     </div>
 <?php endif; ?>
@@ -203,8 +210,8 @@
             });
             function RoxyFileBrowser(field_name, url, type, win) {
                 var roxyFileman = '/fileman/index.html';
-                if (roxyFileman.indexOf("?") < 0) {     
-                    roxyFileman += "?type=" + type;   
+                if (roxyFileman.indexOf("?") < 0) {
+                    roxyFileman += "?type=" + type;
                 }else{
                     roxyFileman += "&type=" + type;
                 }
@@ -212,14 +219,14 @@
                 tinyMCE.activeEditor.windowManager.open({
                     file: roxyFileman,
                     title: 'Mannhullet media',
-                    width: 850, 
+                    width: 850,
                     height: 650,
                     resizable: "yes",
                     plugins: "media",
                     inline: "yes",
-                    close_previous: "no"  
+                    close_previous: "no"
                 }, {     window: win,     input: field_name    });
-                return false; 
+                return false;
             }
         });
     </script>
@@ -379,7 +386,7 @@
         });
     </script>
 <?php endif; ?>
-<?php if ($this->eventPayedAjax): ?>
+<?php if ($this->event && $this->attendees): ?>
     <script type="text/javascript">
         $(document).ready(function () {
             var unpayedAttendeeClick = function(e) {

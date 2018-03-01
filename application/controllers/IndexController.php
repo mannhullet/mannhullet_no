@@ -2,7 +2,8 @@
 
 class IndexController extends Zend_Controller_Action
 {
-    protected $user;
+
+    protected $user = null;
 
     public function init()
     {
@@ -18,7 +19,7 @@ class IndexController extends Zend_Controller_Action
         Model_DbTable_Sessions::persistUserId();
 
         $this->view->socialIconFacebook = Model_DbTable_Partials::getHtml('/footer:socialIconFacebook'); //'https://www.facebook.com/groups/2217435004/';
-        $this->view->socialIconTwitter = Model_DbTable_Partials::getHtml('/footer:socialIconTwitter'); //'https://twitter.com/search?q=mannhullet&src=typd';
+        $this->view->socialIconInstagram = Model_DbTable_Partials::getHtml('/footer:socialIconInstagram'); //'https://twitter.com/search?q=mannhullet&src=typd';
 
         $sponsor = $this->view->sponsor = Model_DbTable_Sponsors::getSponsorRandom();
     }
@@ -51,6 +52,13 @@ class IndexController extends Zend_Controller_Action
     {
         $this->view->mainnav = '/om';
         $this->view->headTitle('Om oss');
+    }
+
+    public function omhistorieAction()
+    {
+        $this->view->mainnav = '/om';
+        $this->view->headTitle('Om oss');
+        $this->view->headTitle('Historie', 'PREPEND');
     }
 
     public function omstatutterAction()
