@@ -13,3 +13,5 @@ public/mannhullet_no/
 public/arkivet/
 public/*.html
 public/*.mobirise
+.htaccess
+.htpasswd
