@@ -57,9 +57,12 @@
                         <a href="<?php echo $image->src; ?>" class="thumbnail" data-lightbox="album-<?php echo $this->album->id; ?>" data-title="<?php echo $image->title; ?>">
                             <img src="<?php echo $image->src; ?>.thumb.jpg" width="253" height="168" alt="<?php echo $image->title; ?>" />
                         </a>
+                        <p style="margin-top:-10px;">
+                            <a href="<?php echo $image->src; ?>" target="_blank"><span class="glyphicon glyphicon-zoom-in"></span> Høy oppløsning</a>
 <?php if ($this->user && $this->user->admin): ?>
-                        <p style="margin-top:-10px;"><a href="/bilder/<?php echo $this->album->id . '/act/useascover/iid/' . $image->id; ?>"><span class="glyphicon glyphicon-picture"></span> Bruk som album cover</a> &nbsp;&nbsp;&nbsp; <a href="/bilder/<?php echo $this->album->id . '/act/deleteimage/iid/' . $image->id; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette bildet over?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></p>
+                        <br /><a href="/bilder/<?php echo $this->album->id . '/act/useascover/iid/' . $image->id; ?>"><span class="glyphicon glyphicon-picture"></span> Bruk som album cover</a> &nbsp;&nbsp;&nbsp; <a href="/bilder/<?php echo $this->album->id . '/act/deleteimage/iid/' . $image->id; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette bildet over?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
 <?php endif; ?>
+                        </p>
                     </div>
 <?php endforeach; else: ?>
                     <div class="col-md-12">
