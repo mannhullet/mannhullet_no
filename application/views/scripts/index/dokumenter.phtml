@@ -3,16 +3,16 @@
                         <h1>Dokumenter</h1>
                     </div>
                 </div>
-<?php if (count($this->nthsdocs) > 0): foreach ($this->nthsdocs as $category => $nthsdocs): ?>
+<?php if (count($this->docs) > 0): foreach ($this->docs as $category => $docs): ?>
                 <div class="row gallery">
                     <div class="col-md-12 galleryYear">
                         <h2><?php echo $category; ?></h2>
                     </div>
-<?php foreach ($nthsdocs as $nths): ?>
+<?php foreach ($docs as $doc): ?>
                     <div style="height:440px;" class="col-xs-6 col-md-3 documentsTag">
-                        <a href="/dokumenter/<?php echo $nths->id; ?>" class="thumbnail">
-<?php if ($nths->cover_image_src): ?>
-                            <img src="<?php echo $nths->cover_image_src; ?>" />
+                        <a href="/dokumenter/<?php echo $doc->id; ?>" class="thumbnail">
+<?php if ($doc->cover_image_src): ?>
+                            <img src="<?php echo $doc->cover_image_src; ?>" />
 <?php else: ?>
                             <div class="noCover text-center">
                                 <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
@@ -20,12 +20,12 @@
 
 <?php endif; ?>
                             <div class="caption">
-                                <h3><?php echo $nths->title; ?></h3>
-                                <small class="text-muted">Publisert <?php echo $nths->getPublishedDate(); ?></small>
+                                <h3><?php echo $doc->title; ?></h3>
+                                <small class="text-muted">Publisert <?php echo $doc->getPublishedDate(); ?></small>
                             </div>
                         </a>
 <?php if ($this->user && $this->user->admin): ?>
-                        <p style="margin-top:-10px;"><a href="/dokumenter/<?php echo $nths->id . '/act/deletedocument'; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette dokumentet &laquo;<?php echo $nths->title; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></p>
+                        <p style="margin-top:-10px;"><a href="/dokumenter/<?php echo $doc->id . '/act/deletedocument'; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette dokumentet &laquo;<?php echo $doc->title; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></p>
 <?php endif; ?>
                     </div>
 <?php endforeach; ?>

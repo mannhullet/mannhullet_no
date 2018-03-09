@@ -67,9 +67,9 @@ class Model_Uploader
         });
     }
 
-    public static function handleRequestNTHS($year = false)
+    public static function handleRequestDocs($year = false)
     {
-        $targetDir = APPLICATION_PATH . '/../public/uploads/nths/';
+        $targetDir = APPLICATION_PATH . '/../public/uploads/documents/';
 
         return self::handleRequest($targetDir, function($filename) use($targetDir, $year) {
 
@@ -95,7 +95,7 @@ class Model_Uploader
 
             if (!is_file($filename)) return;
 
-            $file = Model_DbTable_FileCollections::addNTHS($title, $ext, $filename, $year);
+            $file = Model_DbTable_FileCollections::addDocument($title, $ext, $filename, $year);
             return $file;
 
         });
@@ -146,7 +146,7 @@ class Model_Uploader
             if (!$in = @fopen($_FILES["file"]["tmp_name"], "rb")) {
                 die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
             }
-        } else {	
+        } else {
             if (!$in = @fopen("php://input", "rb")) {
                 die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
             }
@@ -168,4 +168,3 @@ class Model_Uploader
         die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
     }
 }
-

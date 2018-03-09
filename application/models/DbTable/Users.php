@@ -77,7 +77,7 @@ class Model_DbTable_Users extends Zend_Db_Table_Abstract
         $mail->setFrom('no-reply@mannhullet.no','Mannhullet.no');
 
         // Email content, text and HTML alternatives (less spam-like, prevents SpamAssassin from blocking).
-        $mail->setBodyText('Mannhullet, marins linjeforening, er nå klar for deg. Bli med for å få tilgang til arrangementer, bildegallerier, NTHS-dokumenter, Marina publikasjoner og mer. http://' . $_SERVER['HTTP_HOST'] . '/registrer/usr/' . $username);
+        $mail->setBodyText('Mannhullet, marins linjeforening, er nå klar for deg. Bli med for å få tilgang til arrangementer, bildegallerier, dokumenter, Marina publikasjoner og mer. http://' . $_SERVER['HTTP_HOST'] . '/registrer/usr/' . $username);
         $mail->setBodyHtml($html->render('inviteuser.phtml'));
 
         $mail->send();
@@ -163,4 +163,3 @@ class Model_DbTable_Users extends Zend_Db_Table_Abstract
         return true;
     }
 }
-

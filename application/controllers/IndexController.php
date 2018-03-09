@@ -484,13 +484,13 @@ class IndexController extends Zend_Controller_Action
         if (!$this->user) throw new Exception('Not logged in');
 
         $this->view->mainnav = '/memberarea';
-        $this->view->secondarynav = '/nths';
+        $this->view->secondarynav = '/dokumenter';
         $this->view->headTitle('Dokumenter');
 
         $nid = $this->_getParam('nid', -1);
         if ($nid < 0) {
 
-            $nthsdocs = $this->view->nthsdocs = Model_DbTable_FileCollections::getNTHSDocs();
+            $docs = $this->view->docs = Model_DbTable_FileCollections::getDocs();
 
             if (!$this->user->admin) return;
 
@@ -500,7 +500,7 @@ class IndexController extends Zend_Controller_Action
             if ($this->getRequest()->isPost()) {
 
                 $year = $this->_getParam('year', false);
-                Model_Uploader::handleRequestNTHS($year);
+                Model_Uploader::handleRequestDocs($year);
 
             }
 
@@ -511,10 +511,10 @@ class IndexController extends Zend_Controller_Action
 
                 if (!$this->user->admin) return;
 
-                $nths = Model_DbTable_FileCollections::getCollection($nid);
-                $filename = APPLICATION_PATH . '/../public/' . $nths->src;
+                $doc = Model_DbTable_FileCollections::getCollection($nid);
+                $filename = APPLICATION_PATH . '/../public/' . $doc->src;
                 if (is_file($filename)) @unlink($filename);
-                $nths->delete();
+                $doc->delete();
                 return $this->_redirect('/dokumenter');
 
             }else{

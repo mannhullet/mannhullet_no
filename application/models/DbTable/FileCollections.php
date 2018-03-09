@@ -6,7 +6,7 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
     protected $_rowClass = 'Model_FileCollection';
 
-    public static function getCategories($collection, $order = 'category DESC', $count = -1, $offset = -1)
+    public static function getCollectionMembers($collection, $order = 'category DESC', $count = -1, $offset = -1)
     {
         $fileCollections = new self();
         $select = $fileCollections->select()->order($order)->where('collection = ?', $collection);
@@ -51,7 +51,7 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
     public static function getAlbums()
     {
         $result = array();
-        $albums = self::getCategories('albums');
+        $albums = self::getCollectionMembers('albums');
         foreach ($albums as $album) {
             if (!isset($result[$album->category])) $result[$album->category] = array();
             $result[$album->category][] = $album;
@@ -67,7 +67,7 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
 
         $fileCollections = new self();
         $fileCollection = $fileCollections->createRow();
-        
+
         $fileCollection->title = $title;
         $fileCollection->category = $year;
         $fileCollection->collection = 'albums';
@@ -106,7 +106,7 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
     public static function getMarinas()
     {
         $result = array();
-        $marinas = self::getCategories('marinas');
+        $marinas = self::getCollectionMembers('marinas');
         foreach ($marinas as $marina) {
             if (!isset($result[$marina->category])) $result[$marina->category] = array();
             $result[$marina->category][] = $marina;
@@ -114,7 +114,7 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
         return $result;
     }
 
-    public static function addNTHS($title, $ext, $filename, $year = false)
+    public static function addDocument($title, $ext, $filename, $year = false)
     {
         if (!$title || $title == '' || !$ext || $ext == '' || !is_file($filename)) throw new Exception('Invalid parameters');
 
@@ -122,10 +122,10 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
 
         $fileCollections = new self();
         $fileCollection = $fileCollections->createRow();
-        
+
         $fileCollection->title = $title;
         $fileCollection->category = ($year ? $year : date('Y'));
-        $fileCollection->collection = 'nths';
+        $fileCollection->collection = 'documents';
         $fileCollection->created = time();
         $fileCollection->src = $src;
         $fileCollection->file_extension = $ext;
@@ -134,15 +134,14 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
         return $fileCollection;
     }
 
-    public static function getNTHSDocs()
+    public static function getDocs()
     {
         $result = array();
-        $nthsdocs = self::getCategories('nths');
-        foreach ($nthsdocs as $nths) {
-            if (!isset($result[$nths->category])) $result[$nths->category] = array();
-            $result[$nths->category][] = $nths;
+        $docs = self::getCollectionMembers('documents');
+        foreach ($docs as $doc) {
+            if (!isset($result[$doc->category])) $result[$doc->category] = array();
+            $result[$doc->category][] = $doc;
         }
         return $result;
     }
 }
-
