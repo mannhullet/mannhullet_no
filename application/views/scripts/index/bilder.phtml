@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div style="margin-top:40px;" class="row gallery">
-<?php if (count($this->album->getFiles()) > 0 ): foreach ($this->album->getFiles() as $image): ?>
+<?php if (count($this->images) > 0 ):foreach ($this->images as $image): ?>
                     <div class="col-xs-6 col-md-3">
                         <a href="<?php echo $image->src; ?>" class="thumbnail" data-lightbox="album-<?php echo $this->album->id; ?>" data-title="<?php echo $image->title; ?>">
                             <img src="<?php echo $image->src; ?>.thumb.jpg" width="253" height="168" alt="<?php echo $image->title; ?>" />

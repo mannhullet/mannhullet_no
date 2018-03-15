@@ -20,7 +20,7 @@
                             <img src="<?php echo $folder->cover_image_src; ?>.thumb.jpg" width="253" height="168" />
 <?php else: ?>
                             <div class="noCover text-center">
-                                <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
+                                <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-folder-close"></span>
                             </div>
 
 
@@ -52,11 +52,14 @@
                     </div>
                 </div>
                 <div style="margin-top:40px;" class="row gallery">
-            <!---Denne blokken burde unngå å kalle getFiles() to ganger -->
-<?php if (count($this->folder->getFiles()) > 0 ): foreach ($this->folder->getFiles() as $doc): ?>
+<?php if (count($this->files) > 0 ): foreach ($this->files as $doc): ?>
                     <div style="height:440px;" class="col-xs-6 col-md-3 documentsTag">
-                        <a href="/dokumenter/<?php echo $doc->id; ?>" class="thumbnail">
-                          <!--- IKKE GJORT MER UNDER HER -->
+                        <a href="<?php echo $doc->src; ?>" class="thumbnail">
+                            <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
+                            <div class="caption">
+                                <h3><?php echo $doc->title; ?></h3>
+                            </div>
+                        </a>
                     </div>
 <?php endforeach; else: ?>
                     <div class="col-md-12">

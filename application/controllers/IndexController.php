@@ -383,6 +383,7 @@ class IndexController extends Zend_Controller_Action
 
             $this->view->lightbox = true;
             $album = $this->view->album = Model_DbTable_FileCollections::getCollection($aid);
+            $images = $this->view->images = $album->getFiles();
 
             $this->view->headTitle($album->category, 'PREPEND');
             $this->view->headTitle($album->title, 'PREPEND');
@@ -515,6 +516,7 @@ class IndexController extends Zend_Controller_Action
 
             }else{
                 $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($nid);
+                $files = $this->view->files = $folder->getFiles();
 
                 $this->view->headTitle($folder->category, 'PREPEND');
                 $this->view->headTitle($folder->title, 'PREPEND');
