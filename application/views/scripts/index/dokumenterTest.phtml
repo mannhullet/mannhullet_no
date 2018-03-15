@@ -1,0 +1,81 @@
+<?php if (isset($this->folders)): /* /bilder */ ?>
+                <div class="row">
+                    <div class="col-md-12">
+<?php if ($this->user && $this->user->admin): ?>
+                        <h1>Dokumenter</h1><span class="pull-right"><a href="/endre/gallerier" class="btn btn-default">Opprett mappe</a></span></h1>
+<?php else: ?>
+                        <h1>Dokumenter</h1>
+<?php endif; ?>
+                    </div>
+                </div>
+<?php if (count($this->folders) > 0): foreach ($this->folders as $category => $folders): ?>
+                <div class="row gallery">
+                    <div class="col-md-12 galleryYear">
+                        <h2><?php echo $category; ?></h2>
+                    </div>
+<?php foreach ($folders as $folder): ?>
+                    <div style="height:292px;overflow:hidden;" class="col-xs-6 col-md-3">
+                        <a href="/bilder/<?php echo $folder->id; ?>" class="thumbnail">
+<?php if ($folder->cover_image_src): ?>
+                            <img src="<?php echo $folder->cover_image_src; ?>.thumb.jpg" width="253" height="168" />
+<?php else: ?>
+                            <div class="noCover text-center">
+                                <span style="font-size:220px;" class="glyphicon glyphicon-document"></span>
+                            </div>
+
+<?php endif; ?>
+                            <div class="caption">
+                                <h3><?php echo $folder->title; ?></h3>
+                                <small class="text-muted">Publisert <?php echo $folder->getPublishedDate(); ?></small>
+                            </div>
+                        </a>
+                    </div>
+<?php endforeach; ?>
+                </div>
+<?php endforeach; else: ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="margin-top:30px;" class="alert alert-info">
+                            Det er ikke lagt ut noen mapper enda
+                        </div>
+                    </div>
+                </div>
+<?php endif; ?>
+<?php else: /* /bilder/:aid */ ?>
+                <div class="row">
+                    <div class="col-md-12">
+<?php if ($this->user && $this->user->admin): ?> <!--- -->
+                        <h1><a href="/bilder">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <?php echo $this->folder->title; ?><span class="pull-right"><a href="/endre/gallerier/gid/  <?php echo $this->album->id; ?>" class="btn btn-default">Endre mappe</a></span> </h1>
+<?php else: ?>
+                        <h1><a href="/bilder">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <?php echo $this->folder->title; ?></h1>
+<?php endif; ?>
+                    </div>
+                </div>
+                <div style="margin-top:40px;" class="row gallery">
+            <!---Denne blokken burde unngå å kalle getFiles() to ganger -->
+<?php if (count($this->folder->getFiles()) > 0 ): foreach ($this->folder->getFiles() as $doc): ?>
+                    <div style="height:440px;" class="col-xs-6 col-md-3 documentsTag">
+                        <a href="/dokumenter/<?php echo $doc->id; ?>" class="thumbnail">
+                          <!--- IKKE GJORT MER UNDER HER -->
+<?php if ($this->user && $this->user->admin): ?>
+                        <p style="margin-top:-10px;"><a href="/bilder/<?php echo $this->album->id . '/act/useascover/iid/' . $image->id; ?>"><span class="glyphicon glyphicon-picture"></span> Bruk som album cover</a> &nbsp;&nbsp;&nbsp; <a href="/bilder/<?php echo $this->album->id . '/act/deleteimage/iid/' . $image->id; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette bildet over?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></p>
+<?php endif; ?>
+                    </div>
+<?php endforeach; else: ?>
+                    <div class="col-md-12">
+                        <div style="margin-top:30px;" class="alert alert-info">
+                            Det er ikke lagt ut noen bilder i dette albummet enda
+                        </div>
+                    </div>
+<?php endif; ?>
+<?php if ($this->uploadWidget): ?>
+                    <div class="col-sm-12 col-md-12">
+                        <hr />
+                        <h3>Last opp bilder</h3>
+                    </div>
+                    <div id="uploader" style="overflow:hidden;" class="col-sm-12 col-md-12">
+                        <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+                    </div>
+<?php endif; ?>
+                </div>
+<?php endif; ?>
