@@ -77,12 +77,6 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
         return $fileCollection;
     }
 
-    public static function getAlbum($aid)
-    {
-        $album = self::getCollection($aid);
-        return $album;
-    }
-
     public static function addMarina($title, $ext, $filename, $year = false)
     {
         if (!$title || $title == '' || !$ext || $ext == '' || !is_file($filename)) throw new Exception('Invalid parameters');
@@ -144,4 +138,7 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
         }
         return $result;
     }
+
+
+
 }

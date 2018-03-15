@@ -1,6 +1,11 @@
+<?php if (isset($this->docs)): /* /bilder */ ?>
                 <div class="row">
                     <div class="col-md-12">
+<?php if ($this->user && $this->user->admin): ?>
+                        <h1>Dokumenter</h1><span class="pull-right"><a href="/endre/gallerier" class="btn btn-default">Opprett mappe</a></span></h1>
+<?php else: ?>
                         <h1>Dokumenter</h1>
+<?php endif; ?>
                     </div>
                 </div>
 <?php if (count($this->docs) > 0): foreach ($this->docs as $category => $docs): ?>
@@ -8,25 +13,22 @@
                     <div class="col-md-12 galleryYear">
                         <h2><?php echo $category; ?></h2>
                     </div>
-<?php foreach ($docs as $doc): ?>
-                    <div style="height:440px;" class="col-xs-6 col-md-3 documentsTag">
-                        <a href="/dokumenter/<?php echo $doc->id; ?>" class="thumbnail">
-<?php if ($doc->cover_image_src): ?>
-                            <img src="<?php echo $doc->cover_image_src; ?>" />
+<?php foreach ($docs as $folder): ?>
+                    <div style="height:440px;overflow:hidden;" class="col-xs-6 col-md-3">
+                        <a href="/dokumenter/<?php echo $folder->id; ?>" class="thumbnail">
+<?php if ($folder->cover_image_src): ?>
+                            <img src="<?php echo $folder->cover_image_src; ?>.thumb.jpg" width="253" height="168" />
 <?php else: ?>
                             <div class="noCover text-center">
                                 <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
                             </div>
 
+
 <?php endif; ?>
                             <div class="caption">
-                                <h3><?php echo $doc->title; ?></h3>
-                                <small class="text-muted">Publisert <?php echo $doc->getPublishedDate(); ?></small>
+                                <h3><?php echo $folder->title; ?></h3>
                             </div>
                         </a>
-<?php if ($this->user && $this->user->admin): ?>
-                        <p style="margin-top:-10px;"><a href="/dokumenter/<?php echo $doc->id . '/act/deletedocument'; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette dokumentet &laquo;<?php echo $doc->title; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a></p>
-<?php endif; ?>
                     </div>
 <?php endforeach; ?>
                 </div>
@@ -34,17 +36,43 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div style="margin-top:30px;" class="alert alert-info">
-                            Det er ikke lagt ut noen dokumenter enda
+                            Det er ikke lagt ut noen mapper enda
                         </div>
                     </div>
                 </div>
 <?php endif; ?>
-<?php if ($this->uploadWidget): ?>
-                <div class="col-sm-12 col-md-12">
-                    <hr />
-                    <h3>Last opp dokumenter for <?php echo date('Y'); ?><span class="pull-right"><a href="/endre/dokumenter" class="btn btn-default">Last opp for tidligere år</a></span></h3>
+<?php else: /* /bilder/:aid */ ?>
+                <div class="row">
+                    <div class="col-md-12">
+<?php if ($this->user && $this->user->admin): ?> <!--- -->
+                        <h1><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <?php echo $this->folder->title; ?><span class="pull-right"><!---<a href="/endre/gallerier/gid/  <?php echo $this->album->id; ?>" class="btn btn-default">Endre mappe</a>---></span> </h1>
+<?php else: ?>
+                        <h1><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <?php echo $this->folder->title; ?></h1>
+<?php endif; ?>
+                    </div>
                 </div>
-                <div id="uploader" style="overflow:hidden;" class="col-sm-12 col-md-12">
-                    <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+                <div style="margin-top:40px;" class="row gallery">
+            <!---Denne blokken burde unngå å kalle getFiles() to ganger -->
+<?php if (count($this->folder->getFiles()) > 0 ): foreach ($this->folder->getFiles() as $doc): ?>
+                    <div style="height:440px;" class="col-xs-6 col-md-3 documentsTag">
+                        <a href="/dokumenter/<?php echo $doc->id; ?>" class="thumbnail">
+                          <!--- IKKE GJORT MER UNDER HER -->
+                    </div>
+<?php endforeach; else: ?>
+                    <div class="col-md-12">
+                        <div style="margin-top:30px;" class="alert alert-info">
+                            Det er ikke lagt ut noen dokumenter i denne mappen enda
+                        </div>
+                    </div>
+<?php endif; ?>
+<?php if ($this->uploadWidget): ?>
+                    <div class="col-sm-12 col-md-12">
+                        <hr />
+                        <h3>Last opp dokumenter</h3>
+                    </div>
+                    <div id="uploader" style="overflow:hidden;" class="col-sm-12 col-md-12">
+                        <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+                    </div>
+<?php endif; ?>
                 </div>
 <?php endif; ?>

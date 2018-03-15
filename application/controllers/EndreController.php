@@ -300,7 +300,7 @@ class EndreController extends Zend_Controller_Action
 
         }else{
 
-            $album = $this->view->album = Model_DbTable_FileCollections::getAlbum($gid);
+            $album = $this->view->album = Model_DbTable_FileCollections::getCollection($gid);
 
             $this->view->uploadWidget = true;
             $this->view->uploadWidgetDestination = '/bilder/' . $album->id . '/act/uploader';

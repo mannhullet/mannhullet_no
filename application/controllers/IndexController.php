@@ -382,7 +382,7 @@ class IndexController extends Zend_Controller_Action
         }else{
 
             $this->view->lightbox = true;
-            $album = $this->view->album = Model_DbTable_FileCollections::getAlbum($aid);
+            $album = $this->view->album = Model_DbTable_FileCollections::getCollection($aid);
 
             $this->view->headTitle($album->category, 'PREPEND');
             $this->view->headTitle($album->title, 'PREPEND');
@@ -492,10 +492,6 @@ class IndexController extends Zend_Controller_Action
 
             $docs = $this->view->docs = Model_DbTable_FileCollections::getDocs();
 
-            if (!$this->user->admin) return;
-
-            $this->view->uploadWidget = true;
-            $this->view->uploadWidgetDestination = '/dokumenter';
 
             if ($this->getRequest()->isPost()) {
 
@@ -518,9 +514,15 @@ class IndexController extends Zend_Controller_Action
                 return $this->_redirect('/dokumenter');
 
             }else{
+                $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($nid);
 
-                Model_DbTable_FileCollections::downloadCollectionFile($nid);
+                $this->view->headTitle($folder->category, 'PREPEND');
+                $this->view->headTitle($folder->title, 'PREPEND');
 
+                if (!$this->user->admin) return;
+
+                $this->view->uploadWidget = true;
+                $this->view->uploadWidgetDestination = '/dokumenter/' . $folder->id . '/act/uploader';
             }
         }
     }
