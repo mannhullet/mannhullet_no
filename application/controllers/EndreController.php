@@ -287,6 +287,7 @@ class EndreController extends Zend_Controller_Action
     {
         if (!$this->user || $this->user->admin == 0) throw new Exception('Must be site administrator to edit / create albums');
 
+        $this->view->currentSchoolYear = $this->currentSchoolYear();
         $gid = $this->_getParam('gid', -1);
         if ($gid == -1) {
 
@@ -347,9 +348,53 @@ class EndreController extends Zend_Controller_Action
     {
         if (!$this->user->admin) throw new Exception('Only site administrator allowed');
 
-        $year = $this->view->year = $this->_getParam('year', false);
+        $this->view->currentSchoolYear = $this->currentSchoolYear();
+        $fid = $this->_getParam('fid', -1);
+        if ($fid == -1) {
 
-        $this->view->uploadWidget = true;
-        $this->view->uploadWidgetDestination = '/dokumenter' . ($year ? '?year=' . $year : '');
+            if ($this->getRequest()->isPost()) {
+                $title = $this->_getParam('title', false);
+                if ($title == false) return $this->_redirect('/endre/dokumenter');
+                $category = $this->_getParam('category', false);
+                $folder = Model_DbTable_FileCollections::createDocumentFolder($title, $category);
+                return $this->_redirect('/endre/dokumenter/fid/' . $folder->id);
+            }
+        }else{
+            $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($fid);
+
+            $this->view->uploadWidget = true;
+            $this->view->uploadWidgetDestination = '/dokumenter/' . $folder->id . '/act/uploader';
+
+            $act = $this->_getParam('act', false);
+            if ($act == 'delete') {
+                foreach ($folder->getFiles() as $file) {
+                    $filename = APPLICATION_PATH . '/../public/' . $file->src;
+                    if (is_file($filename)) @unlink($filename);
+                }
+                $folder->delete();
+                return $this->_redirect('/dokumenter');
+            }
+
+            if ($this->getRequest()->isPost()) {
+                $title = $this->_getParam('title', false);
+                if (!$title) return $this->_redirect('/endre/dokumenter');
+                $category = $this->_getParam('category', false);
+                $folder->title = $title;
+                $folder->category = $category ? $category : $this->currentSchoolYear();
+                $folder->save();
+                return $this->_redirect('/endre/dokumenter/fid/' . $folder->id);
+            }
+        }
+    }
+
+    private function currentSchoolYear() {
+        $year = date('Y');
+        $month = date('n');
+        if ($month >= 7){
+            return $year . '/' . ($year + 1);
+        }
+        else {
+            return $year - 1 . '/' . $year;
+        }
     }
 }

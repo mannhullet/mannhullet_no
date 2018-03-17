@@ -67,15 +67,14 @@ class Model_Uploader
         });
     }
 
-    public static function handleRequestDocs($year = false)
+    public static function handleRequestDocs(Model_FileCollection $folder)
     {
         $targetDir = APPLICATION_PATH . '/../public/uploads/documents/';
 
-        return self::handleRequest($targetDir, function($filename) use($targetDir, $year) {
+        return self::handleRequest($targetDir, function($filename) use($targetDir, $folder) {
 
             $title = end(explode('/', $filename));
             $title = implode('.', array_slice(explode('.', $title), 0, -1));
-            $ext = end(explode('.', $filename));
 
             // Generate a UUID(v4) for the filename
             $uuid = sprintf('%s-%s-%04x-%04x-%s',
@@ -95,7 +94,7 @@ class Model_Uploader
 
             if (!is_file($filename)) return;
 
-            $file = Model_DbTable_FileCollections::addDocument($title, $ext, $filename, $year);
+            $file = $folder->addFile($filename, $title);
             return $file;
 
         });

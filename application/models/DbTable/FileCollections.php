@@ -61,16 +61,26 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
 
     public static function createAlbum($title, $year = false)
     {
+        return Model_DbTable_FileCollections::createCollection($title, $year, 'albums');
+    }
+
+    public static function createDocumentFolder($title, $year = false)
+    {
+        return Model_DbTable_FileCollections::createCollection($title, $year, 'documents');
+    }
+
+    public static function createCollection($title, $year = false, $collection)
+    {
         if (!$title || $title == '') throw new Exception('You must supply a title to create an album');
 
-        if (!$year) $year = date('Y');
+        if (!$year) $year = date('n') >= 7 ? date('Y') . '/' . (date('Y') + 1) : (date('Y') - 1). '/' . date('Y');
 
         $fileCollections = new self();
         $fileCollection = $fileCollections->createRow();
 
         $fileCollection->title = $title;
         $fileCollection->category = $year;
-        $fileCollection->collection = 'albums';
+        $fileCollection->collection = $collection;
         $fileCollection->created = time();
         $fileCollection->save();
 

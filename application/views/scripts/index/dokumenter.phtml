@@ -1,8 +1,8 @@
-<?php if (isset($this->docs)): /* /bilder */ ?>
+<?php if (isset($this->docs)): /* /dokumenter */ ?>
                 <div class="row">
                     <div class="col-md-12">
 <?php if ($this->user && $this->user->admin): ?>
-                        <h1>Dokumenter</h1><span class="pull-right"><a href="/endre/gallerier" class="btn btn-default">Opprett mappe</a></span></h1>
+                        <h1>Dokumenter</h1><span class="pull-right"><a href="/endre/dokumenter" class="btn btn-default">Opprett mappe</a></span></h1>
 <?php else: ?>
                         <h1>Dokumenter</h1>
 <?php endif; ?>
@@ -41,11 +41,11 @@
                     </div>
                 </div>
 <?php endif; ?>
-<?php else: /* /bilder/:aid */ ?>
+<?php else: /* /dokumenter/:fid */ ?>
                 <div class="row">
                     <div class="col-md-12">
 <?php if ($this->user && $this->user->admin): ?> <!--- -->
-                        <h1><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <?php echo $this->folder->title; ?><span class="pull-right"><!---<a href="/endre/gallerier/gid/  <?php echo $this->album->id; ?>" class="btn btn-default">Endre mappe</a>---></span> </h1>
+                        <h1><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <?php echo $this->folder->title; ?><span class="pull-right"><a href="/endre/dokumenter/fid/<?php echo $this->folder->id; ?>" class="btn btn-default">Endre mappe</a></span> </h1>
 <?php else: ?>
                         <h1><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <?php echo $this->folder->title; ?></h1>
 <?php endif; ?>
@@ -55,13 +55,21 @@
 <?php if (count($this->files) > 0 ): foreach ($this->files as $doc): ?>
                     <div style="height:440px;" class="col-xs-6 col-md-3 documentsTag">
                         <a href="<?php echo $doc->src; ?>" class="thumbnail">
-                            <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
+                            <div class="noCover text-center">
+                                <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
+                            </div>
                             <div class="caption">
                                 <h3><?php echo $doc->title; ?></h3>
                             </div>
                         </a>
+                        <?php if ($this->user && $this->user->admin): ?>
+                            <p style="margin-top:-10px;">
+                                <a href="/dokumenter/<?php echo $this->folder->id; ?>/act/downloaddocument/fileid/<?php echo $doc->id; ?>"><span class="glyphicon glyphicon-download-alt"></span> Last ned</a>
+                                <br /><a href="/dokumenter/<?php echo $this->folder->id . '/act/deletedocument/fileid/' . $doc->id; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette filen?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
+                            </p>
+                        <?php endif; ?>
                     </div>
-<?php endforeach; else: ?>
+                <?php endforeach; else: ?>
                     <div class="col-md-12">
                         <div style="margin-top:30px;" class="alert alert-info">
                             Det er ikke lagt ut noen dokumenter i denne mappen enda

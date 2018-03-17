@@ -488,43 +488,39 @@ class IndexController extends Zend_Controller_Action
         $this->view->secondarynav = '/dokumenter';
         $this->view->headTitle('Dokumenter');
 
-        $nid = $this->_getParam('nid', -1);
-        if ($nid < 0) {
+        $fid = $this->_getParam('fid', -1);
+        if ($fid < 0) {
 
             $docs = $this->view->docs = Model_DbTable_FileCollections::getDocs();
 
-
-            if ($this->getRequest()->isPost()) {
-
-                $year = $this->_getParam('year', false);
-                Model_Uploader::handleRequestDocs($year);
-
-            }
-
         }else{
+            $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($fid);
+            $files = $this->view->files = $folder->getFiles();
+
+            $this->view->headTitle($folder->category, 'PREPEND');
+            $this->view->headTitle($folder->title, 'PREPEND');
+
+            if (!$this->user->admin) return;
+
+            $this->view->uploadWidget = true;
+            $this->view->uploadWidgetDestination = '/dokumenter/' . $folder->id . '/act/uploader';
 
             $act = $this->_getParam('act', '');
             if ($act == 'deletedocument') {
+                $fileid = $this->_getparam('fileid', '');
+                $file = Model_DbTable_Files::getFileById($fileid);
+                $folder->removeFile($file);
+                return $this->_redirect('/dokumenter/' . $folder->id);
+            }
+            elseif ($act == 'downloaddocument') {
+                $fileid = $this->_getparam('fileid', '');
+                Model_DbTable_Files::downloadFile($fileid);
+            }
 
-                if (!$this->user->admin) return;
-
-                $doc = Model_DbTable_FileCollections::getCollection($nid);
-                $filename = APPLICATION_PATH . '/../public/' . $doc->src;
-                if (is_file($filename)) @unlink($filename);
-                $doc->delete();
-                return $this->_redirect('/dokumenter');
-
-            }else{
-                $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($nid);
-                $files = $this->view->files = $folder->getFiles();
-
-                $this->view->headTitle($folder->category, 'PREPEND');
-                $this->view->headTitle($folder->title, 'PREPEND');
-
-                if (!$this->user->admin) return;
-
-                $this->view->uploadWidget = true;
-                $this->view->uploadWidgetDestination = '/dokumenter/' . $folder->id . '/act/uploader';
+            if ($this->getRequest()->isPost()) {
+                if ($act == 'uploader') {
+                    Model_Uploader::handleRequestDocs($folder);
+                }
             }
         }
     }
