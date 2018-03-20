@@ -54,13 +54,6 @@ class Model_DbTable_Files extends Zend_Db_Table_Abstract
         $ext = $ext ? $ext : '';
         $basename = $file->title . '.' . $ext;
 
-        // var_dump($file->src);
-        // echo '<pre>';
-        // echo 'Filename: ' . $filename . '<br/>';
-        // echo 'Basename: ' . $basename;
-        // echo '</pre>';
-        // return;
-
         header('Content-Type: application/octet-stream');
 
         header('Content-Description: File Transfer');
