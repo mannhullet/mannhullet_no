@@ -21,7 +21,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Opprett album</button>
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Opprett mappe</button>
                         </form>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                             <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
-                            <a href="/endre/dokumenter/fid/<?php echo $this->folder->id . '/act/delete'; ?>" onclick="if (!confirm('Er du sikker på at du vil slette mappen &laquo;<?php echo $this->folder->title; ?>&raquo; og alle bildene det inneholder?')) return false;" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Slett <small>(kan ikke angres)</small></a>
+                            <a href="/endre/dokumenter/fid/<?php echo $this->folder->id . '/act/delete'; ?>" onclick="if (!confirm('Er du sikker på at du vil slette mappen &laquo;<?php echo $this->folder->title; ?>&raquo; og alle filene den inneholder?')) return false;" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Slett <small>(kan ikke angres)</small></a>
                         </form>
                     </div>
 <?php if ($this->uploadWidget): ?>

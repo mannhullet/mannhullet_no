@@ -23,8 +23,12 @@ class Model_DbTable_Files extends Zend_Db_Table_Abstract
 
     public static function getFileById($fid)
     {
+        if (!is_numeric($fid)) throw new Exception('No such file');
+
         $files = new self();
-        $file = $files->fetchRow( $files->select()->where('id = ?', $fid) );
+        $file = $files->fetchRow($files->select()->where('id = ?', $fid));
+        if (!$file) throw new Exception('No such file');
+
         return $file;
     }
 

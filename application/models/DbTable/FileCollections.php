@@ -141,7 +141,7 @@ class Model_DbTable_FileCollections extends Zend_Db_Table_Abstract
     public static function getDocs()
     {
         $result = array();
-        $docs = self::getCollectionMembers('documents');
+        $docs = self::getCollectionMembers('documents', array('category DESC', 'title'));
         foreach ($docs as $doc) {
             if (!isset($result[$doc->category])) $result[$doc->category] = array();
             $result[$doc->category][] = $doc;

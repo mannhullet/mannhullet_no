@@ -14,7 +14,7 @@
                         <h2><?php echo $category; ?></h2>
                     </div>
 <?php foreach ($docs as $folder): ?>
-                    <div style="height:440px;overflow:hidden;" class="col-xs-6 col-md-3">
+                    <div style="overflow:hidden;" class="col-xs-6 col-md-3">
                         <a href="/dokumenter/<?php echo $folder->id; ?>" class="thumbnail">
 <?php if ($folder->cover_image_src): ?>
                             <img src="<?php echo $folder->cover_image_src; ?>.thumb.jpg" width="253" height="168" />
@@ -22,8 +22,6 @@
                             <div class="noCover text-center">
                                 <span style="font-size:200px;padding:20px 0 0 0;" class="glyphicon glyphicon-folder-close"></span>
                             </div>
-
-
 <?php endif; ?>
                             <div class="caption">
                                 <h3><?php echo $folder->title; ?></h3>
@@ -60,14 +58,16 @@
                             </div>
                             <div class="caption">
                                 <h3><?php echo $doc->title; ?></h3>
+                                <small class="text-muted">Publisert <?php echo $doc->getPublishedDate(); ?></small>
                             </div>
                         </a>
-                        <?php if ($this->user && $this->user->admin): ?>
-                            <p style="margin-top:-10px;">
-                                <a href="/dokumenter/<?php echo $this->folder->id; ?>/act/downloaddocument/fileid/<?php echo $doc->id; ?>"><span class="glyphicon glyphicon-download-alt"></span> Last ned</a>
+                        <p style="margin-top:-10px;">
+                            <a href="/dokumenter/<?php echo $this->folder->id; ?>/act/downloaddocument/fileid/<?php echo $doc->id; ?>"><span class="glyphicon glyphicon-download-alt"></span> Last ned</a>
+                            <?php if ($this->user && $this->user->admin): ?>
                                 <br /><a href="/dokumenter/<?php echo $this->folder->id . '/act/deletedocument/fileid/' . $doc->id; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette filen?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
-                            </p>
-                        <?php endif; ?>
+                                <a href="/endre/dokument/fileid/<?php echo $doc->id ?>"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                            <?php endif; ?>
+                        </p>
                     </div>
                 <?php endforeach; else: ?>
                     <div class="col-md-12">

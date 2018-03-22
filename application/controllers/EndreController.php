@@ -387,6 +387,49 @@ class EndreController extends Zend_Controller_Action
         }
     }
 
+    public function dokumentAction()
+    {
+        if (!$this->user->admin) throw new Exception('Only site administrator allowed');
+
+        $fileid = $this->_getParam('fileid', -1);
+        //TODO: Check that fileid points to a valid file. That is, it exists, and is in documents (not albums).
+        if ($fileid == -1) {
+            return $this->_redirect('/dokumenter');
+        }
+        else {
+            $availableFolders = $this->view->availableFolders = Model_DbTable_FileCollections::getDocs();
+
+            $file = $this->view->file = Model_DbTable_Files::getFileById($fileid); // Throws an exception if file doesn't exist
+            $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($file->collection_id);
+            if ($folder->collection != 'documents') {
+                throw new Exception('Not a valid collection. Must be a document collection');
+            }
+
+            if ($this->getRequest()->isPost()) {
+                $title = $this->_getParam('title', false);
+                $folderid = $this->_getParam('folderid', false);
+
+                // Abort if user tries to move file to a folder that doesn't exist
+                //IDEA: Should this give the user feedback, not just a 500 error?
+                $newCollection = Model_DbTable_FileCollections::getCollection($folderid); // Throws an exception if collection does not exist
+                if ($newCollection->collection != 'documents') {
+                    throw new Exception('Not a valid collection. Must be a document collection');
+                }
+
+                if ($folderid != $folder->id) {
+                    $file->collection_id = $folderid;
+                    $file->save();
+                }
+                if ($title != $file->title) {
+                    $file->title = $title;
+                    $file->save();
+                }
+
+                $this->_redirect('/dokumenter/' . $folder->id);
+            }
+        }
+    }
+
     private function currentSchoolYear() {
         $year = date('Y');
         $month = date('n');
@@ -394,7 +437,7 @@ class EndreController extends Zend_Controller_Action
             return $year . '/' . ($year + 1);
         }
         else {
-            return $year - 1 . '/' . $year;
+            return ($year - 1) . '/' . $year;
         }
     }
 }

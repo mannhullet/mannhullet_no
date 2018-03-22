@@ -46,4 +46,3 @@ class Model_FileCollection extends Zend_Db_Table_Row_Abstract
         foreach ($files as $file) $file->delete();
     }
 }
-
