@@ -1,0 +1,13 @@
+[production]
+resources.db.adapter = "PDO_MYSQL"
+resources.db.params.dbname = "DBNAME"
+resources.db.params.host = "HOST"
+resources.db.params.username = "USERNAME"
+resources.db.params.password = "PASSWORD"
+resources.db.params.charset = "utf8"
+
+[staging : production]
+
+[testing : production]
+
+[development : production]

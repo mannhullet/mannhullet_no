@@ -22,12 +22,26 @@ set_include_path(implode(PATH_SEPARATOR, array(
 
 /** Zend_Application */
 require_once 'Zend/Application.php';
+require_once 'Zend/Config/Ini.php';
+
+// Merge the main config application.ini with the local config environment.ini
+// The local config contains database info, and should not be publicised
+$config = new Zend_Config_Ini(
+    APPLICATION_PATH . '/configs/application.ini',
+    APPLICATION_ENV
+);
+$environment = new Zend_Config_Ini(
+    APPLICATION_PATH . '/configs/environment.ini',
+    APPLICATION_ENV,
+    array('allowModifications' => true)
+);
+$environment->merge($config);
+
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
     APPLICATION_ENV,
-    APPLICATION_PATH . '/configs/application.ini'
+    $environment
 );
 
 $application->bootstrap()->run();
-
