@@ -17,14 +17,15 @@ $resourceLoader = new Zend_Loader_Autoloader_Resource(array(
 $resourceLoader->addResourceType('model', 'models/', 'Model');
 
 $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', 'production');
-$dbAdapter = Zend_Db::factory($config->resources->db->adapter, $config->resources->db->params);
+$environment = new Zend_Config_Ini(APPLICATION_PATH . '/configs/environment.ini', 'production');
+$dbAdapter = Zend_Db::factory($environment->resources->db->adapter, $environment->resources->db->params);
 Zend_Db_Table::setDefaultAdapter($dbAdapter);
 Zend_Session::setSaveHandler(new Zend_Session_SaveHandler_DbTable($config->resources->session->saveHandler->options));
 
 
 //session_start();
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -133,7 +134,7 @@ function listDirectory($path){
       closedir($d);
     }
   }
-  
+
   return $ret;
 }
 class RoxyFile{
@@ -416,7 +417,7 @@ class RoxyImage{
         self::OutputImage($source, RoxyFile::GetExtension(basename($source)), $destination, $quality);
       return;
     }
-    
+
     $newWidth = $width;
     $newHeight = floor($newWidth / $r);
     if(($height > 0 && $newHeight > $height) || !$width){
