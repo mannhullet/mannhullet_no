@@ -36,6 +36,7 @@ $environment = new Zend_Config_Ini(
     array('allowModifications' => true)
 );
 $environment->merge($config);
+$environment->setReadOnly();
 
 
 // Create application, bootstrap, and run
