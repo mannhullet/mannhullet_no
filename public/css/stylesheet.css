@@ -691,12 +691,13 @@ div.col-xs-6.col-md-4.documentsTag h3 {
     word-wrap: break-word;
 }
 
-.documentContainer {
+.fileContainer {
     display: flex;
     flex-wrap: wrap;
 }
 
 .fileOptions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
 }
