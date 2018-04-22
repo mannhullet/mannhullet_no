@@ -690,3 +690,13 @@ div.col-xs-6.col-md-3.documentsTag h3 {
 div.col-xs-6.col-md-4.documentsTag h3 {
     word-wrap: break-word;
 }
+
+.documentContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.fileOptions {
+    display: flex;
+    justify-content: space-around;
+}

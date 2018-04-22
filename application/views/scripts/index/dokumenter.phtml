@@ -49,29 +49,30 @@
 <?php endif; ?>
                     </div>
                 </div>
-                <div style="margin-top:40px;" class="row gallery">
+                <!-- <div style="margin-top:40px;" class="row gallery"> -->
+                <div style="margin-top:40px;" class="documentContainer">
 <?php if (count($this->files) > 0 ): foreach ($this->files as $doc): ?>
-                    <div style="height:auto;" class="col-xs-6 col-md-4 documentsTag">
-                        <a href="<?php echo $doc->src; ?>" class="thumbnail"  >
-                          <div class="row" style="padding:10px">
-                            <div class="col-md-3">
-                              <span style="font-size:100px;padding:20px 0 0 0;" class="glyphicon glyphicon-file"></span>
-                            </div>
-                            <div class="col-md-9" style="word-wrap: break-word;">
-                              <h3><?php echo $doc->title; ?></h3>
-                              <small class="text-muted">Publisert <?php echo $doc->getPublishedDate(); ?></small>
-                            </div>
-                          </div>
-                        </a>
+                    <div class="col-xs-12 col-sm-6 col-lg-4 documentsTag">
+                        <div class="thumbnail">
+                            <a href="<?php echo $doc->src; ?>">
+                              <div style="padding:10px; display: flex;">
+                                <div style="align-self:center;">
+                                  <span style="font-size:5em; vertical-align: middle" class="glyphicon glyphicon-file"></span>
+                                </div>
+                                <div style="word-wrap: break-word;">
+                                  <h3><?php echo $doc->title; ?></h3>
+                                  <small class="text-muted">Publisert <?php echo $doc->getPublishedDate(); ?></small>
+                                </div>
+                              </div>
+                            </a>
 
-                        <div class="row">
-                          <p style="margin-top:-10px;" class="text-center">
-                              <a href="/dokumenter/<?php echo $this->folder->id; ?>/act/downloaddocument/fileid/<?php echo $doc->id; ?>"><span class="glyphicon glyphicon-download-alt"></span> Last ned</a>
-                              <?php if ($this->user && $this->user->admin): ?>
-                                  <a href="/dokumenter/<?php echo $this->folder->id . '/act/deletedocument/fileid/' . $doc->id; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette filen?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
-                                  <a href="/endre/dokument/fileid/<?php echo $doc->id ?>"><span class="glyphicon glyphicon-edit"></span> Endre</a>
-                              <?php endif; ?>
-                          </p>
+                            <div class="fileOptions">
+                                  <a href="/dokumenter/<?php echo $this->folder->id; ?>/act/downloaddocument/fileid/<?php echo $doc->id; ?>"><span class="glyphicon glyphicon-download-alt"></span> Last ned</a>
+                                  <?php if ($this->user && $this->user->admin): ?>
+                                      <a href="/dokumenter/<?php echo $this->folder->id . '/act/deletedocument/fileid/' . $doc->id; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette filen?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
+                                      <a href="/endre/dokument/fileid/<?php echo $doc->id ?>"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                                  <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; else: ?>
