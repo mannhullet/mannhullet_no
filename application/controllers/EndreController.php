@@ -287,6 +287,7 @@ class EndreController extends Zend_Controller_Action
     {
         if (!$this->user || $this->user->admin == 0) throw new Exception('Must be site administrator to edit / create albums');
 
+        $this->view->currentSchoolYear = $this->currentSchoolYear();
         $gid = $this->_getParam('gid', -1);
         if ($gid == -1) {
 
@@ -300,7 +301,7 @@ class EndreController extends Zend_Controller_Action
 
         }else{
 
-            $album = $this->view->album = Model_DbTable_FileCollections::getAlbum($gid);
+            $album = $this->view->album = Model_DbTable_FileCollections::getCollection($gid);
 
             $this->view->uploadWidget = true;
             $this->view->uploadWidgetDestination = '/bilder/' . $album->id . '/act/uploader';
@@ -347,9 +348,96 @@ class EndreController extends Zend_Controller_Action
     {
         if (!$this->user->admin) throw new Exception('Only site administrator allowed');
 
-        $year = $this->view->year = $this->_getParam('year', false);
+        $this->view->currentSchoolYear = $this->currentSchoolYear();
+        $fid = $this->_getParam('fid', -1);
+        if ($fid == -1) {
 
-        $this->view->uploadWidget = true;
-        $this->view->uploadWidgetDestination = '/dokumenter' . ($year ? '?year=' . $year : '');
+            if ($this->getRequest()->isPost()) {
+                $title = $this->_getParam('title', false);
+                if ($title == false) return $this->_redirect('/endre/dokumenter');
+                $category = $this->_getParam('category', false);
+                $folder = Model_DbTable_FileCollections::createDocumentFolder($title, $category);
+                return $this->_redirect('/endre/dokumenter/fid/' . $folder->id);
+            }
+        }else{
+            $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($fid);
+
+            $this->view->uploadWidget = true;
+            $this->view->uploadWidgetDestination = '/dokumenter/' . $folder->id . '/act/uploader';
+
+            $act = $this->_getParam('act', false);
+            if ($act == 'delete') {
+                foreach ($folder->getFiles() as $file) {
+                    $filename = APPLICATION_PATH . '/../public/' . $file->src;
+                    if (is_file($filename)) @unlink($filename);
+                }
+                $folder->delete();
+                return $this->_redirect('/dokumenter');
+            }
+
+            if ($this->getRequest()->isPost()) {
+                $title = $this->_getParam('title', false);
+                if (!$title) return $this->_redirect('/endre/dokumenter');
+                $category = $this->_getParam('category', false);
+                $folder->title = $title;
+                $folder->category = $category ? $category : $this->currentSchoolYear();
+                $folder->save();
+                return $this->_redirect('/endre/dokumenter/fid/' . $folder->id);
+            }
+        }
+    }
+
+    public function dokumentAction()
+    {
+        if (!$this->user->admin) throw new Exception('Only site administrator allowed');
+
+        $fileid = $this->_getParam('fileid', -1);
+        //TODO: Check that fileid points to a valid file. That is, it exists, and is in documents (not albums).
+        if ($fileid == -1) {
+            return $this->_redirect('/dokumenter');
+        }
+        else {
+            $availableFolders = $this->view->availableFolders = Model_DbTable_FileCollections::getDocs();
+
+            $file = $this->view->file = Model_DbTable_Files::getFileById($fileid); // Throws an exception if file doesn't exist
+            $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($file->collection_id);
+            if ($folder->collection != 'documents') {
+                throw new Exception('Not a valid collection. Must be a document collection');
+            }
+
+            if ($this->getRequest()->isPost()) {
+                $title = $this->_getParam('title', false);
+                $folderid = $this->_getParam('folderid', false);
+
+                // Abort if user tries to move file to a folder that doesn't exist
+                //IDEA: Should this give the user feedback, not just a 500 error?
+                $newCollection = Model_DbTable_FileCollections::getCollection($folderid); // Throws an exception if collection does not exist
+                if ($newCollection->collection != 'documents') {
+                    throw new Exception('Not a valid collection. Must be a document collection');
+                }
+
+                if ($folderid != $folder->id) {
+                    $file->collection_id = $folderid;
+                    $file->save();
+                }
+                if ($title != $file->title) {
+                    $file->title = $title;
+                    $file->save();
+                }
+
+                $this->_redirect('/dokumenter/' . $folder->id);
+            }
+        }
+    }
+
+    private function currentSchoolYear() {
+        $year = date('Y');
+        $month = date('n');
+        if ($month >= 7){
+            return $year . '/' . ($year + 1);
+        }
+        else {
+            return ($year - 1) . '/' . $year;
+        }
     }
 }

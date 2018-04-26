@@ -1,36 +1,67 @@
-<?php if (!$this->year): ?>
+<?php if (!isset($this->folder)): ?>
                 <div style="margin-top:30px;" class="row">
                     <div class="col-sm-12 col-md-12">
-                        <h1 style="margin-top:0;"><a href="/dokumenter">Dokumenter</a> &raquo; Velg årstall</h1>
+                        <h1 style="margin-top:0;"><a href="/dokumenter">Dokumenter</a> &raquo; Opprett mappe</h1>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <form action="" method="get" role="form">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="year">Årstall du vil publisere for</label>
-                                    <input type="text" name="year" class="form-control" placeholder="" />
+                        <form action="" method="post" role="form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title">Tittel</label>
+                                        <input type="text" name="title" class="form-control" placeholder="" />
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span> Velg</button>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="category">Gruppe <small>(hvilken mappegruppe skal mappen sorteres under)</small></label>
+                                        <input type="text" name="category" class="form-control" placeholder="<?php echo $this->currentSchoolYear; ?>" />
+                                    </div>
+                                </div>
                             </div>
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Opprett mappe</button>
                         </form>
                     </div>
                 </div>
 <?php else: ?>
                 <div style="margin-top:30px;" class="row">
                     <div class="col-sm-12 col-md-12">
-                        <h1 style="margin-top:0;"><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->year; ?> &raquo; Last opp</h1>
+                        <h1 style="margin-top:0;"><a href="/dokumenter">Dokumenter</a> &raquo; <?php echo $this->folder->category; ?> &raquo; <a href="/dokumenter/<?php echo $this->folder->id; ?>"><?php echo $this->folder->title; ?></a> &raquo; Endre</h1>
                     </div>
                 </div>
-<?php if ($this->uploadWidget): ?>
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <h3>Last opp dokumenter for år <?php echo $this->year; ?></h3>
+                    <div class="col-md-12">
+                        <form action="" method="POST" role="form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title">Tittel</label>
+                                        <input type="text" name="title" value="<?php echo $this->folder->title; ?>" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="category">Gruppe <small>(hvilken mappegruppe skal mappen sorteres under)</small></label>
+                                        <input type="text" name="category" value="<?php echo $this->folder->category; ?>" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
+                            <a href="/endre/dokumenter/fid/<?php echo $this->folder->id . '/act/delete'; ?>" onclick="if (!confirm('Er du sikker på at du vil slette mappen &laquo;<?php echo $this->folder->title; ?>&raquo; og alle filene den inneholder?')) return false;" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Slett <small>(kan ikke angres)</small></a>
+                        </form>
                     </div>
-                    <div id="uploader" style="overflow:hidden;" class="col-sm-12 col-md-12">
-                        <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+<?php if ($this->uploadWidget): ?>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <hr />
+                            <h3>Last opp filer</h3>
+                        </div>
+                        <div id="uploader" style="overflow:hidden;" class="col-sm-12 col-md-12">
+                            <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+                        </div>
                     </div>
-                </div>
 <?php endif; ?>
+                </div>
 <?php endif; ?>

@@ -5,13 +5,14 @@
                     </div>
                 </div>
 <?php if (count($this->marinas) > 0): foreach ($this->marinas as $category => $marinas): ?>
-                <div class="row gallery">
+                <div class="fileContainer gallery">
                     <div class="col-md-12 galleryYear">
                         <h2><?php echo $category; ?></h2>
                     </div>
 <?php foreach ($marinas as $marina): ?>
-                    <div style="height:440px;" class="col-xs-6 col-md-3 marinaPub">
-                        <a href="/marina/<?php echo $marina->id; ?>" class="thumbnail">
+                    <div class="col-xs-6 col-md-3 marinaPub">
+                        <div class="thumbnail">
+                        <a href="<?php echo $marina->src; ?>">
 <?php if ($marina->cover_image_src): ?>
                             <img src="<?php echo $marina->cover_image_src; ?>" />
 <?php else: ?>
@@ -26,9 +27,11 @@
                             </div>
                         </a>
 <?php if ($this->user && $this->user->admin): ?>
-                        <p style="margin-top:-10px;">
-                            <a href="#" onclick="$(this).parent().siblings('div.imageEdit').toggleClass('hide');return false;"><span class="glyphicon glyphicon-edit"></span> Endre</a> &nbsp; <a href="/marina/<?php echo $marina->id . '/act/deletemarina'; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette publikasjonen &laquo;<?php echo $marina->title; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
-                        </p>
+                        <div class="fileOptions">
+                            <a href="/marina/<?php echo $marina->id; ?>"><span class="glyphicon glyphicon-download-alt"></span> Last ned</a>
+                            <a href="#" onclick="$(this).parent().siblings('div.imageEdit').toggleClass('hide');return false;"><span class="glyphicon glyphicon-edit"></span> Endre</a>
+                            <a href="/marina/<?php echo $marina->id . '/act/deletemarina'; ?>" onclick="if (!confirm('Er du sikker på at du ønsker å slette publikasjonen &laquo;<?php echo $marina->title; ?>&raquo;?')) return false;"><span class="glyphicon glyphicon-remove"></span> Slett</a>
+                        </div>
                         <div class="imageEdit well hide" style="position:relative;z-index:9999;">
                             <strong>Endre bilde<span class="pull-right"><button type="button" class="close" onclick="$('div.imageEdit').addClass('hide');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></span></strong>
                             <form action="" method="POST" class="form-horizontal">
@@ -50,7 +53,12 @@
                                 <button type="submit" class="btn btn-default">Lagre endring</button>
                             </form>
                         </div>
+<?php else: ?>
+    <p style="margin-top:-10px;">
+        <a href="/marina/<?php echo $marina->id; ?>"><span class="glyphicon glyphicon-download-alt"></span> Last ned</a>
+    </p>
 <?php endif; ?>
+                    </div>
                     </div>
 <?php endforeach; ?>
                 </div>

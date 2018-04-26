@@ -16,3 +16,4 @@ public/*.mobirise
 .htaccess
 .htpasswd
 htaccess.htaccess
+application/configs/environment.ini

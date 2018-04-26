@@ -23,8 +23,12 @@ class Model_DbTable_Files extends Zend_Db_Table_Abstract
 
     public static function getFileById($fid)
     {
+        if (!is_numeric($fid)) throw new Exception('No such file');
+
         $files = new self();
-        $file = $files->fetchRow( $files->select()->where('id = ?', $fid) );
+        $file = $files->fetchRow($files->select()->where('id = ?', $fid));
+        if (!$file) throw new Exception('No such file');
+
         return $file;
     }
 
@@ -45,5 +49,28 @@ class Model_DbTable_Files extends Zend_Db_Table_Abstract
 
         return $file;
     }
-}
 
+    public static function downloadFile($fid)
+    {
+        $file = self::getFileById($fid);
+        $filename = APPLICATION_PATH . '/../public/' . $file->src;
+        $ext = pathinfo($file->src, PATHINFO_EXTENSION);
+        $ext = $ext ? $ext : '';
+        $basename = $file->title . '.' . $ext;
+
+        header('Content-Type: application/octet-stream');
+
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename='.$basename);
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filename));
+        ob_clean();
+        flush();
+        ob_end_flush();
+        readfile($filename);
+        exit;
+    }
+}
