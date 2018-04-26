@@ -382,7 +382,8 @@ class IndexController extends Zend_Controller_Action
         }else{
 
             $this->view->lightbox = true;
-            $album = $this->view->album = Model_DbTable_FileCollections::getAlbum($aid);
+            $album = $this->view->album = Model_DbTable_FileCollections::getCollection($aid);
+            $images = $this->view->images = $album->getFiles();
 
             $this->view->headTitle($album->category, 'PREPEND');
             $this->view->headTitle($album->title, 'PREPEND');
@@ -484,43 +485,42 @@ class IndexController extends Zend_Controller_Action
         if (!$this->user) throw new Exception('Not logged in');
 
         $this->view->mainnav = '/memberarea';
-        $this->view->secondarynav = '/nths';
+        $this->view->secondarynav = '/dokumenter';
         $this->view->headTitle('Dokumenter');
 
-        $nid = $this->_getParam('nid', -1);
-        if ($nid < 0) {
+        $fid = $this->_getParam('fid', -1);
+        if ($fid < 0) {
 
-            $nthsdocs = $this->view->nthsdocs = Model_DbTable_FileCollections::getNTHSDocs();
+            $docs = $this->view->docs = Model_DbTable_FileCollections::getDocs();
+
+        }else{
+            $folder = $this->view->folder = Model_DbTable_FileCollections::getCollection($fid);
+            $files = $this->view->files = $folder->getFiles();
+
+            $this->view->headTitle($folder->category, 'PREPEND');
+            $this->view->headTitle($folder->title, 'PREPEND');
 
             if (!$this->user->admin) return;
 
             $this->view->uploadWidget = true;
-            $this->view->uploadWidgetDestination = '/dokumenter';
-
-            if ($this->getRequest()->isPost()) {
-
-                $year = $this->_getParam('year', false);
-                Model_Uploader::handleRequestNTHS($year);
-
-            }
-
-        }else{
+            $this->view->uploadWidgetDestination = '/dokumenter/' . $folder->id . '/act/uploader';
 
             $act = $this->_getParam('act', '');
             if ($act == 'deletedocument') {
+                $fileid = $this->_getparam('fileid', '');
+                $file = Model_DbTable_Files::getFileById($fileid);
+                $folder->removeFile($file);
+                return $this->_redirect('/dokumenter/' . $folder->id);
+            }
+            elseif ($act == 'downloaddocument') {
+                $fileid = $this->_getparam('fileid', '');
+                Model_DbTable_Files::downloadFile($fileid);
+            }
 
-                if (!$this->user->admin) return;
-
-                $nths = Model_DbTable_FileCollections::getCollection($nid);
-                $filename = APPLICATION_PATH . '/../public/' . $nths->src;
-                if (is_file($filename)) @unlink($filename);
-                $nths->delete();
-                return $this->_redirect('/dokumenter');
-
-            }else{
-
-                Model_DbTable_FileCollections::downloadCollectionFile($nid);
-
+            if ($this->getRequest()->isPost()) {
+                if ($act == 'uploader') {
+                    Model_Uploader::handleRequestDocs($folder);
+                }
             }
         }
     }

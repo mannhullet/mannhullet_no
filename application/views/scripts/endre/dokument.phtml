@@ -1,0 +1,40 @@
+<div style="margin-top:30px;" class="row">
+    <div class="col-sm-12 col-md-12">
+        <h1 style="margin-top:0;"><a href="/dokumenter">Dokumenter</a> &raquo;
+            <?php echo $this->folder->category; ?> &raquo;
+            <a href="/dokumenter/<?php echo $this->folder->id; ?>"><?php echo $this->folder->title; ?></a> &raquo;
+            <?php echo ($this->file->title ? $this->file->title : pathinfo($this->file->src, PATHINFO_BASENAME)); ?> &raquo;
+            Endre</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form action="" method="POST" role="form">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="title">Tittel</label>
+                        <input type="text" name="title" value="<?php echo $this->file->title; ?>" class="form-control" placeholder="" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="folderid">Mappe</label>
+                        <select name="folderid" class="form-control">
+                            <?php foreach ($this->availableFolders as $category => $folders) :  ?>
+                                <?php foreach ($folders as $folder): ?>
+                                    <option <?php if ($this->folder->id == $folder->id) echo 'selected'; ?> value="<?php echo $folder->id; ?>">
+                                        <?php echo $category . ' - ' . $folder->title; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <button type="submit" name="submit" value="save" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Lagre endringer</button>
+            <a href="/endre/dokumenter/fid/<?php echo $this->folder->id . '/act/delete'; ?>" onclick="if (!confirm('Er du sikker på at du vil slette mappen &laquo;<?php echo $this->folder->title; ?>&raquo; og alle bildene det inneholder?')) return false;" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Slett <small>(kan ikke angres)</small></a>
+        </form>
+    </div>
+</div>

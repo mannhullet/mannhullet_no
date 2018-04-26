@@ -131,7 +131,7 @@ class AdminController extends Zend_Controller_Action
 
         $act = $this->_getParam('act', '');
         if ($act == 'revokeSiteAdmin') {
-            if (count($siteAdmins) == 1) throw new Exception('There must allways be atleast one administrator');
+            if (count($siteAdmins) == 1) throw new Exception('There must always be at least one administrator');
             $user_id = $this->_getParam('uid', -1);
             $user = Model_DbTable_Users::getUserById($user_id);
             if (!$user) throw new Exception('User does not exist');
