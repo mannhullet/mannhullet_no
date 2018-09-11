@@ -54,6 +54,12 @@ class IndexController extends Zend_Controller_Action
         $this->view->headTitle('Om oss');
     }
 
+    public function sjiraffAction ()
+    {
+      $this->view->mainnav = '/sjiraff';
+      $this->view->headTitle('Sjiraffenvers');
+    }
+
     public function omhistorieAction()
     {
         $this->view->mainnav = '/om';
