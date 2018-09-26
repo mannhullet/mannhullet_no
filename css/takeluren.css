@@ -1,0 +1,107 @@
+/* Kommentar */
+
+body {
+  width: 100%;
+  background-color: #F2F2F2;
+  font-family: "Helvetica Neue";
+  font-weight: 200;
+}
+
+
+/* ----------------------------------- */
+
+.content {
+  width: 100%;
+  padding-right: 5%;
+  padding-left: 5%;
+  margin-top: 10px;
+}
+
+.contentleft {
+  width: 30%;
+  float: left;
+  height: 100px;
+}
+
+.contentmid {
+  width: 35%;
+  float: left;
+  height: 35%;
+  margin: auto;
+}
+
+.versUt {
+  text-align: center;
+}
+
+.plassholder2 {
+  color: darkgrey;
+}
+
+.knapp {
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "Helvetica Neue";
+  font-weight: 200;
+  background-color: #7eb762;
+  color: white;
+}
+
+.takelurmunn {
+  border-radius: 8px;
+  border: none;
+  background-color: #F2F2F2;
+}
+
+.scrollbarWindow {
+  position: relative;
+  overflow: scroll;
+  overflow-x: hidden;
+  height: 300px;
+  border: none;
+  right: 9.25%;
+  padding: 25px;
+  margin: 10px;
+}
+
+.submitButton {
+  border: none;
+  border-radius: 4px;
+  background-color: #7eb762;
+  color: white;
+  padding: 20px;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.inputbox {
+  width: 75%;
+  padding: 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+h3 {
+  color: black;
+  font-weight: 300;
+  font-family: "Helvetica Neue";
+  font-size: 20px;
+}
+
+.mainInfo {
+  font-size: 150%;
+}
+
+.extraInfo {
+  margin: 0;
+}
+
+.infoDescription {
+  font-weight: bold;
+}

@@ -58,6 +58,8 @@ class IndexController extends Zend_Controller_Action
     {
       $this->view->mainnav = '/sjiraff';
       $this->view->headTitle('Sjiraffenvers');
+
+      $verses = $this->view->verses = Model_DbTable_Sjiraffenvers::getVerses();
     }
 
     public function omhistorieAction()
