@@ -1,10 +1,9 @@
-USE mannhullet_no;
 CREATE TABLE sjiraffenvers (
-  id int NOT NULL AUTO_INCREMENT,
-  tekst varChar(255),
-  dato varChar(255),
-  kommentar varChar(255),
-  PRIMARY KEY(id)
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tekst varChar(255)  CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  forfatter varChar(70)  CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  dato date,
+  kommentar varChar(255)  CHARACTER SET utf8 COLLATE utf8_unicode_ci
 );
 
 INSERT INTO sjiraffenvers(tekst, kommentar) VALUES ('Jeg ønsker meg en himmelseng<br/>en himmelseng med speil i<br/>så jeg kan ligge og speile meg<br/>og se hvor jeg er deilig.' , 'Originalt vers');
