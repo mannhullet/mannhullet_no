@@ -13,22 +13,30 @@
   </head>
   <!-- Kommentar -->
   <body>
+    <?php
+    $arr = $this->verses->toArray();
+    $breaks = array("<br />","<br>","<br/>","<br />", '<br\>',"&lt;br /&gt;","&lt;br/&gt;","&lt;br&gt");
+    $allVerses = str_replace("\\", "", json_encode($arr, JSON_UNESCAPED_UNICODE));
+    ?>
+    <div id="hentvers" style="display: none;">
+      <?php  echo $allVerses ?>
+    </div>
     <div class="row">
         <div class = "col-md-4 col-sm-12">
             <h3>Skriv inn sjiraffenvers:</h3>
-            <form method="post" action="saveVerse.php" name="versInput">
+            <form method="post" action="" name="versInput">
               <div class="row">
-                <textarea class="inputbox" id="formText" name="formText" rows="4" cols="40"
+                <textarea class="inputbox" id="formText" name="text" rows="4" cols="40"
                   placeholder="Jeg kjøpte meg en himmelseng..." required></textarea>
               </div>
 
               <div class="row">
-                <textarea class="inputbox" id="formAuthor" name="formAuthor" rows="1" cols="40"
+                <textarea class="inputbox" id="formAuthor" name="author" rows="1" cols="40"
                   placeholder="Navn..."></textarea>
               </div>
 
               <div class="row">
-                <textarea class="inputbox" id="formComment" name="formComment" rows="1" cols="40"
+                <textarea class="inputbox" id="formComment" name="comment" rows="1" cols="40"
                   placeholder="Annen info..."></textarea>
               </div>
 
@@ -48,28 +56,26 @@
 
       <div class = "col-md-4 col-sm-12 " >
         <div class="row">
-          <button class="center-block" type = "button" onclick="getVerse(<?php $this->verses ?>); " >  <img
+          <button class="center-block" type = "button" onclick=" getVerse() " >  <img
             src="tak4.png" style="width:100%;" ></button>
           <p id="plassholder" class="plassholder2 text-center">Trykk på bildet for å få et vers</p>
         </div>
-
       </div>
 
       <div class="col-md-4 col-sm-12">
-       <p id="visVers" class="mainInfo"></p>
-       <p id="visForfatter" class="extraInfo"></p>
-       <p id="visKommentar" class="extraInfo"></p>
-       <p id="visDato" class="extraInfo"></p>
+       <p id="visVers">
+       </p>
      </div>
      </div>
 
 
      <div class="row">
        <p>
-         <?php  foreach ($this->verses as $tekst => $verses):
-            echo $tekst;
-          endforeach;?>
-            <br>
+         <?php  foreach ($this->verses as $verse):
+            echo $verse->tekst;?>
+            <br> <br>
+          <?php endforeach;?>
+
        </p>
      </div>
 

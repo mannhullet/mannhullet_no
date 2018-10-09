@@ -60,6 +60,16 @@ class IndexController extends Zend_Controller_Action
       $this->view->headTitle('Sjiraffenvers');
 
       $verses = $this->view->verses = Model_DbTable_Sjiraffenvers::getVerses();
+
+      if ($this->getRequest()->isPost()) {
+        $verse = $this->_getParam('text', false);
+        $author = $this->_getParam('author', false);
+        $comment = $this->_getParam('comment', false);
+
+        Model_DbTable_Sjiraffenvers::addVerse($verse, $author, $comment);
+        return $this->_redirect('/sjiraff'
+      );
+      }
     }
 
     public function omhistorieAction()
