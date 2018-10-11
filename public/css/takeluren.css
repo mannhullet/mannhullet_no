@@ -2,14 +2,46 @@
   display: none;
 }
 
-h3 {
-  color: black;
-  font-size: 20px;
+.takelurmunnContainer {
+  width: 70%;
+  border: 0;
+  padding: 0;
+  background-color: inherit;
+}
+
+.takelurmunn {
+  width:100%;
+  border: none;
+  margin-top: 40px;
+}
+
+/*.noSelect {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}*/
+
+#plassholder {
+  color: #606060;
+  margin-top: 5px;
 }
 
 #visVers {
   text-align: center;
   font-size: 150%;
+}
+
+.sjiraffenversgenerator h3 {
+  color: black;
+  font-size: 20px;
+}
+
+.sjiraffenversgenerator .row {
+  margin-left: 0;
 }
 
 .inputbox {
@@ -28,36 +60,55 @@ h3 {
   padding: 10px;
   display: inline-block;
   font-size: 16px;
-  font-weight: 200;
   background-color: #7eb762;
   color: white;
 }
 
+.scrollbarBorder {
+  width: 76%;
+  margin: 20px 5px;
+}
+
+.scrollbarBorderNoLogIn {
+  margin-top: 50px;
+}
+
 .scrollbarWindow {
   position: relative;
+  width: 90%;
   overflow: scroll;
   overflow-x: hidden;
   height: 300px;
   border: none;
-  right: 9.25%;
   padding: 25px;
-  margin: 10px;
+  margin: 5px;
 }
 
-.takelurmunnContainer {
-  width: 70%;
-  border: 0;
-  padding: 0;
-  background-color: inherit;
+.scrollbarWindowNoLogIn {
+  height: 500px;
 }
 
-.takelurmunn {
-  width:100%;
-  border: none;
-  margin-top: 40px;
+.scrollbarWindow p {
+  font-size: 16px;
 }
 
-#plassholder {
-  color: darkgrey;
-  margin-top: 5px;
+/* Scroller width */
+.sjiraffenversgenerator ::-webkit-scrollbar {
+    width: 20px;
+}
+
+/* Scroller track */
+.sjiraffenversgenerator ::-webkit-scrollbar-track {
+    background: #A9A9A9;
+}
+
+/* Scroller handle */
+.sjiraffenversgenerator ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+}
+
+/* Scroller handle on hover */
+.sjiraffenversgenerator ::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
