@@ -60,14 +60,20 @@ class IndexController extends Zend_Controller_Action
       $this->view->headTitle('Sjiraffenvers');
 
       $verses = $this->view->verses = Model_DbTable_Sjiraffenvers::getVerses();
-
+      $this->view->errormsg = false;
       if ($this->getRequest()->isPost()) {
         $verse = $this->_getParam('text', false);
         $author = $this->_getParam('author', false);
         $comment = $this->_getParam('comment', false);
 
-        Model_DbTable_Sjiraffenvers::addVerse(nl2br($verse), nl2br($author), nl2br($comment));
-        return $this->_redirect('/sjiraff');
+        $reg = '/[\^£$%&*}{@~><>|=_+¬]/';
+        if (strlen($verse) > 200 || preg_match($reg, $verse) || preg_match($reg, $author) || preg_match($reg, $comment)) {
+          $this->view->errormsg = true;
+        }
+        else {
+          Model_DbTable_Sjiraffenvers::addVerse(nl2br($verse), nl2br($author), nl2br($comment));
+          return $this->_redirect('/sjiraff');
+        }
       }
     }
 
