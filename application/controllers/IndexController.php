@@ -66,9 +66,8 @@ class IndexController extends Zend_Controller_Action
         $author = $this->_getParam('author', false);
         $comment = $this->_getParam('comment', false);
 
-        Model_DbTable_Sjiraffenvers::addVerse($verse, $author, $comment);
-        return $this->_redirect('/sjiraff'
-      );
+        Model_DbTable_Sjiraffenvers::addVerse(nl2br($verse), nl2br($author), nl2br($comment));
+        return $this->_redirect('/sjiraff');
       }
     }
 
