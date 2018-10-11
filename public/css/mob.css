@@ -2,18 +2,54 @@
   display: none;
 }
 
-h3 {
-  color: black;
-  font-size: 20px;
+.takelurmunnContainer {
+  background-color: inherit;
 }
 
-#visVers {
-  text-align: center;
+.takelurmunn {
+  width: 80%;
+  border: none;
 }
 
 #plassholder {
   color: darkgrey;
   margin-top: 5px;
+}
+
+#visVers {
+  text-align: center;
+  font-size: 200%;
+}
+
+.extraInfo {
+  margin: 0;
+  font-size: 150%;
+  text-align: center;
+}
+
+.infoDescription {
+  font-weight: bold;
+}
+
+.sjiraffenversgenerator h3 {
+  color: black;
+  font-size: 20px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.formMob {
+  width: 60%;
+  margin: 10px auto;
+}
+
+.inputbox {
+  width: 100%;
+  padding: 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: none;
 }
 
 .knapp {
@@ -24,42 +60,26 @@ h3 {
   color: white;
 }
 
-.takelurmunnContainer {
-  background-color: inherit;
+.scrollbarBorder {
+  width: 60%;
+  margin: 20px auto;
 }
 
-.takelurmunn {
-  width: 50%;
-  border: none;
+.scrollbarBorderNoLogIn {
+  margin-top: 40px;
 }
 
 .scrollbarWindow {
+  width: 100%;
   overflow: scroll;
   overflow-x: hidden;
   height: 300px;
+  padding-left: 5%;
   border: none;
   padding: 0;
   margin: 0;
-  text-align: center;
-  padding-left: 5%;
 }
 
-.submitButton {
-  border: none;
-  border-radius: 4px;
-  background-color: #7eb762;
-  color: white;
-  padding: 20px;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.inputbox {
-  width: 75%;
-  padding: 10px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  resize: none;
+.scrollbarWindow p {
+  font-size: 20px;
 }

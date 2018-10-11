@@ -24,15 +24,16 @@ function getVerse() {
   var forfatter = obj[i].forfatter;
   var kommentar = obj[i].kommentar;
   var dato = obj[i].dato;
+  console.log(forfatter);
 
   // Give default values to fields that are not defined
-  if (forfatter === undefined) {
+  if (forfatter === undefined || forfatter == null) {
     forfatter = "Ukjent";
   }
   if (kommentar === undefined) {
     kommentar = "";
   }
-  if (dato === undefined) {
+  if (dato === undefined || dato == null) {
     dato = "Ukjent";
   }
 
