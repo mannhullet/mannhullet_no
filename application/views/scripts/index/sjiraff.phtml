@@ -90,8 +90,8 @@
   <div id="hentvers">
     <?php  echo $allVerses ?>
   </div>
-
-  <div class="row">
+  <div class="sjiraffenversgenerator">
+    <div class="row">
     <div class = "col-md-6 col-sm-12" >
       <div class="row">
         <button class="center-block takelurmunnContainer" type = "button" onclick="getVerse()">
@@ -105,7 +105,8 @@
 
     <div class="col-md-6 col-sm-12">
       <div class="row">
-        <div class = "scrollbarWindow">
+        <div class="scrollbarBorder scrollbarBorderNoLogIn">
+          <div class = "scrollbarWindow scrollbarWindowNoLogIn">
             <p>
               <?php  foreach ($this->verses as $verse):
                  echo $verse->tekst;?>
@@ -113,8 +114,10 @@
                <?php endforeach;?>
             </p>
         </div>
+        </div>
       </div>
     </div>
+  </div>
   </div>
 <script src ="js/formValidate.js" type="text/javascript"></script>
 </body>
