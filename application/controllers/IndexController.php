@@ -67,7 +67,7 @@ class IndexController extends Zend_Controller_Action
         $comment = $this->_getParam('comment', false);
 
         $reg = '/[\^£$%&*}{@~><>|=_+¬]/';
-        if (strlen($verse) > 200 || preg_match($reg, $verse) || preg_match($reg, $author) || preg_match($reg, $comment)) {
+        if (strlen($verse) > 200 || strlen($verse) < 40 || preg_match($reg, $verse) || preg_match($reg, $author) || preg_match($reg, $comment)) {
           $this->view->errormsg = true;
         }
         else {

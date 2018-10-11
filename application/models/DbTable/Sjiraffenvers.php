@@ -11,7 +11,7 @@ class Model_DbTable_Sjiraffenvers extends Zend_Db_Table_Abstract
     $verse->tekst = $text;
     $verse->forfatter = $author;
     $verse->kommentar = $comment;
-    $verse->dato = date('d.m.y');
+    $verse->dato = date('y.m.d');
     $verse->save();
 
     return $verse;
