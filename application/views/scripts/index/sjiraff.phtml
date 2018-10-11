@@ -22,53 +22,57 @@
       <?php  echo $allVerses ?>
     </div>
 
-    <div class="row">
-      <div class = "col-md-6 col-sm-12" >
-        <div class="row">
-          <button class="center-block takelurmunnContainer" type = "button" onclick="getVerse()">
-            <img src="img\takeluren.png" class="takelurmunn"></button>
-          <p id="plassholder" class="text-center">Trykk på bildet for å få et vers</p>
-        </div>
-        <div class="row">
-          <p id="visVers"></p>
-        </div>
-      </div>
-
-      <div class = "col-md-6 col-sm-12">
-        <div class="row">
-          <h3>Skriv inn sjiraffenvers</h3>
-          <form method="post" action="" name="versInput">
-            <div class="row">
-              <textarea class="inputbox" id="formText" name="text" rows="4" cols="40"
-              placeholder="Jeg kjøpte meg en himmelseng..." required></textarea>
-            </div>
-
-            <div class="row">
-              <textarea class="inputbox" id="formAuthor" name="author" rows="1" cols="40"
-              placeholder="Navn..."></textarea>
-            </div>
-
-            <div class="row">
-              <textarea class="inputbox" id="formComment" name="comment" rows="1" cols="40"
-              placeholder="Annen info..."></textarea>
-            </div>
-
-            <div = "row center-block">
-              <input type="submit" value="Send inn!" class ="knapp">
-            </div>
-          </form>
-        </div>
-        <div class="row">
-          <div class = "scrollbarWindow">
-              <p>
-                <?php  foreach ($this->verses as $verse):
-                   echo $verse->tekst;?>
-                   <br> <br>
-                 <?php endforeach;?>
-              </p>
+    <div class="sjiraffenversgenerator">
+      <div class="row">
+        <div class = "col-md-6 col-sm-12" >
+          <div class="row">
+            <button class="center-block takelurmunnContainer" type = "button" onclick="getVerse()">
+              <img src="img\takeluren.png" class="takelurmunn noSelect"></button>
+            <p id="plassholder" class="text-center">Trykk på bildet for å få et vers</p>
+          </div>
+          <div class="row">
+            <p id="visVers"></p>
           </div>
         </div>
-      </div>
+
+        <div class = "col-md-6 col-sm-12">
+          <div class="row">
+            <h3>Skriv inn sjiraffenvers</h3>
+            <form method="post" action="" name="versInput">
+              <div class="row">
+                <textarea class="inputbox" id="formText" name="text" rows="4" cols="40"
+                placeholder="Jeg kjøpte meg en himmelseng..." required></textarea>
+              </div>
+
+              <div class="row">
+                <textarea class="inputbox" id="formAuthor" name="author" rows="1" cols="40"
+                placeholder="Navn..."></textarea>
+              </div>
+
+              <div class="row">
+                <textarea class="inputbox" id="formComment" name="comment" rows="1" cols="40"
+                placeholder="Annen info..."></textarea>
+              </div>
+
+              <div = "row center-block">
+                <input type="submit" value="Send inn!" class ="knapp">
+              </div>
+            </form>
+          </div>
+          <div class="row">
+            <div class="scrollbarBorder">
+              <div class = "scrollbarWindow">
+                <p>
+                  <?php  foreach ($this->verses as $verse):
+                     echo $verse->tekst;?>
+                     <br> <br>
+                   <?php endforeach;?>
+                </p>
+            </div>
+            </div>
+          </div>
+        </div>
+       </div>
      </div>
 
   <script src ="js/formValidate.js" type="text/javascript"></script>
